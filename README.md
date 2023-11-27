@@ -1,4 +1,4 @@
-# Nome do projeto
+# Change_image_color
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/iuricode/README-template?style=for-the-badge)
 ![GitHub language count](https://img.shields.io/github/languages/count/iuricode/README-template?style=for-the-badge)
@@ -6,9 +6,11 @@
 ![Bitbucket open issues](https://img.shields.io/bitbucket/issues/iuricode/README-template?style=for-the-badge)
 ![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/iuricode/README-template?style=for-the-badge)
 
-<img src="imagem.png" alt="Exemplo imagem">
+<img src="Controle3.png" alt="Exemplo imagem">
 
-> Linha adicional de texto informativo sobre o que o projeto faz. Sua introdução deve ter cerca de 2 ou 3 linhas. Não exagere, as pessoas não vão ler.
+>Hello everyone, this is a code that I made to change pixels in an image. It uses a color range to search for the color you want to change, and it allows you to adjust values to increase or decrease the pixels >within that range.
+>
+> <img src="imagemnova.png" alt="Exemplo imagem">
 
 ### Ajustes e melhorias
 
