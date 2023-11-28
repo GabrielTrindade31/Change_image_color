@@ -1,10 +1,10 @@
 # Change_image_color
 
-![GitHub repo size](https://img.shields.io/github/repo-size/Change_image_color/README-template?style=for-the-badge)
-![GitHub language count](https://img.shields.io/github/languages/count/Change_image_color/README-template?style=for-the-badge)
-![GitHub forks](https://img.shields.io/github/forks/Change_image_color/README-template?style=for-the-badge)
-![Bitbucket open issues](https://img.shields.io/bitbucket/issues/Change_image_color/README-template?style=for-the-badge)
-![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/Change_image_color/README-template?style=for-the-badge)
+![GitHub repo size](https://img.shields.io/github/repo-size/GabrielTrindade31/Change_image_color)
+![GitHub language count](https://img.shields.io/github/languages/count/GabrielTrindade31/Change_image_color)
+![GitHub forks](https://img.shields.io/github/forks/GabrielTrindade31/Change_image_color)
+![Bitbucket open issues](https://img.shields.io/bitbucket/issues/GabrielTrindade31/Change_image_color)
+![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/GabrielTrindade31/Change_image_color)
 
 
 >Hello everyone, this is a code that I made to change pixels in an image. It uses a color range to search for the color you want to change, and it allows you to adjust values to increase or decrease the pixels within that range.
