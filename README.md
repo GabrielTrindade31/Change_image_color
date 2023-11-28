@@ -6,7 +6,7 @@
 ![Bitbucket open issues](https://img.shields.io/bitbucket/issues/iuricode/README-template?style=for-the-badge)
 ![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/iuricode/README-template?style=for-the-badge)
 
-<img src="controle3.png" alt="Exemplo imagem">
+<img src="control.png" alt="Exemplo imagem">
 
 >Hello everyone, this is a code that I made to change pixels in an image. It uses a color range to search for the color you want to change, and it allows you to adjust values to increase or decrease the pixels >within that range.
 >
