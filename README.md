@@ -6,18 +6,14 @@
 ![Bitbucket open issues](https://img.shields.io/bitbucket/issues/Change_image_color/README-template?style=for-the-badge)
 ![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/Change_image_color/README-template?style=for-the-badge)
 
-<img src="control.png" alt="DS4 default image">
 
 >Hello everyone, this is a code that I made to change pixels in an image. It uses a color range to search for the color you want to change, and it allows you to adjust values to increase or decrease the pixels within that range.
 >
 >Efficiency will depend on the values you use.
->Below we have the image changed when we try to search for the Blue LED on the off-white DS4 and changed the LED color to green and white.
-> <img src="Controle_cor_verde.png" alt="DS4 LED changed to green">
-> <img src="Controle_cor_branca.png" alt="DS4 LED changed to white">
->
->We also have an example using a DS4 default color, where we try to change the off LED to a red LED.
 >
 ><img src="Controle_desligado.png" alt="DS4 LED off">
+
+
 <img src="Controle_cor_vermelha.png" alt="Changed DS4 LED to red">
 >
 
