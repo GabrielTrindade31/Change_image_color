@@ -50,5 +50,5 @@ To use Change_image_color, follow these steps:
 9. After applying the filters, select the "Apply color" button to modify the image.
 10. With the modified image, use "Save Image" to save the image.
 11. In the case of RGBA, if you want to modify the alpha channel, "Add to channel A" serves this purpose.
-<img src="example.jpg" alt="Example of color before being changed">
-<img src="modified.jpg" alt="Modified image">
+<img src="exemplo.jpg" alt="Example of color before being changed">
+<img src="modificada.jpg" alt="Modified image">
