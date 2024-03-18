@@ -1,10 +1,49 @@
-import tkinter as tk
+import customtkinter as ctk
 from tkinter import filedialog, Scale, Toplevel, StringVar, Radiobutton, IntVar, DoubleVar  # Add DoubleVar
 from PIL import Image, ImageTk
 
 # Global variables
 image = None
 modified_image = None
+
+
+# class MyTabView(ctk.CTkTabview):
+#     def __init__(self, master, **kwargs):
+#         super().__init__(master, **kwargs)
+
+#         # create tabs
+#         self.add("Edit")
+#         self.add("Export")
+
+#         # add widgets on tabs
+#         self.label = ctk.CTkLabel(master=self.tab("Edit"))
+#         self.label.grid(row=0, column=0, padx=20, pady=10)
+
+
+
+# class App(ctk.CTk):
+#     def __init__(self):
+#         super().__init__()
+
+#         # setup
+#         ctk.set_appearance_mode('dark')
+#         self.geometry('1000x600')
+#         self.title('Color Changer')
+#         self.minsize(800, 500)
+
+#         # layout
+#         self.rowconfigure(0, weight = 1)
+#         self.rowconfigure(0, weight = 2)
+#         self.rowconfigure(0, weight = 6)
+
+
+#         self.tab_view = MyTabView(master=self)
+#         self.tab_view.grid(row=0, column=0, padx=20, pady=20)
+
+
+# app = App()
+# app.mainloop()
+
 
 # Function to open the image file
 def open_file():
@@ -14,11 +53,13 @@ def open_file():
 
     # Display the original image
     image_tk = ImageTk.PhotoImage(image)
-    image_label.config(image=image_tk)
+    image_label.configure(image=image_tk)
     image_label.image = image_tk
 
 # Function to apply color substitution
 # Function to identify if the image is RGB or RGBA
+
+
 def identify_channels():
     if image:
         if image.mode == "RGBA":
@@ -27,26 +68,34 @@ def identify_channels():
             return False
 
 # Function to add values to channel A
+
+
 def open_add_alpha_window():
     add_alpha_window = Toplevel(root)
     add_alpha_window.title("Add Value to Channel A")
 
     # Slider to add value to channel A
-    alpha_slider = Scale(add_alpha_window, from_=0.0, to=1.0, resolution=0.01, orient=tk.HORIZONTAL, length=200, label="Add to Channel A")
+    alpha_slider = Scale(add_alpha_window, from_=0.0, to=1.0, resolution=0.01,
+                         orient=ctk.HORIZONTAL, length=200, label="Add to Channel A")
     alpha_slider.set(add_alpha_var.get())
     alpha_slider.pack()
 
     # Button to confirm and apply the value
-    confirm_alpha_button = tk.Button(add_alpha_window, text="Confirm", command=lambda: save_and_add_alpha(alpha_slider.get(), add_alpha_window))
+    confirm_alpha_button = ctk.Button(add_alpha_window, text="Confirm", command=lambda: save_and_add_alpha(
+        alpha_slider.get(), add_alpha_window))
     confirm_alpha_button.pack()
 
 # Function to save and add value to channel A
+
+
 def save_and_add_alpha(add_alpha, window):
     add_alpha_var.set(add_alpha)
     window.destroy()
     apply_color()  # Call the function to update the modified image after changing channel A
 
 # Create a variable to store the value to add to channel A
+
+
 def apply_color():
     global image, modified_image
 
@@ -75,7 +124,8 @@ def apply_color():
                 r = max(0, min(255, int(r)))
                 g = max(0, min(255, int(g)))
                 b = max(0, min(255, int(b)))
-                a = max(0, min(255, int(a * 255)))  # Scale float alpha to integer range (0-255)
+                # Scale float alpha to integer range (0-255)
+                a = max(0, min(255, int(a * 255)))
 
                 # Check the choice of channel order
                 if order_var.get() == "RGBA":
@@ -93,52 +143,63 @@ def apply_color():
             return pixel
 
         # Apply color substitution to the image
-        modified_image = image.convert("RGBA" if identify_channels() else "RGB")
+        modified_image = image.convert(
+            "RGBA" if identify_channels() else "RGB")
         modified_image.putdata(list(map(convert_pixel, image.getdata())))
 
         # Display the modified image
         image_tk = ImageTk.PhotoImage(modified_image)
-        image_label.config(image=image_tk)
+        image_label.configure(image=image_tk)
         image_label.image = image_tk
 
 # Function to create a range frame
+
+
 def create_range_frame():
-    range_frame = tk.Frame(root)
+    range_frame = ctk.CTkFrame(root)
     range_frame.pack()
 
     # Configuration for the R channel (red)
-    r_label = tk.Label(range_frame, text="R Channel:")
-    r_label.pack(side=tk.LEFT)
+    r_label = ctk.CTkLabel(range_frame, text="R Channel:")
+    r_label.pack(side=ctk.LEFT)
 
-    r_min_scale = Scale(range_frame, from_=0, to=255, orient=tk.HORIZONTAL, length=200, label="Min")
-    r_min_scale.pack(side=tk.LEFT)
+    r_min_scale = Scale(range_frame, from_=0, to=255,
+                        orient=ctk.HORIZONTAL, length=200, label="Min")
+    r_min_scale.pack(side=ctk.LEFT)
 
-    r_max_scale = Scale(range_frame, from_=0, to=255, orient=tk.HORIZONTAL, length=200, label="Max")
-    r_max_scale.pack(side=tk.LEFT)
+    r_max_scale = Scale(range_frame, from_=0, to=255,
+                        orient=ctk.HORIZONTAL, length=200, label="Max")
+    r_max_scale.pack(side=ctk.LEFT)
 
     # Configuration for the G channel (green)
-    g_label = tk.Label(range_frame, text="G Channel:")
-    g_label.pack(side=tk.LEFT)
+    g_label = ctk.CTkLabel(range_frame, text="G Channel:")
+    g_label.pack(side=ctk.LEFT)
 
-    g_min_scale = Scale(range_frame, from_=0, to=255, orient=tk.HORIZONTAL, length=200, label="Min")
-    g_min_scale.pack(side=tk.LEFT)
+    g_min_scale = Scale(range_frame, from_=0, to=255,
+                        orient=ctk.HORIZONTAL, length=200, label="Min")
+    g_min_scale.pack(side=ctk.LEFT)
 
-    g_max_scale = Scale(range_frame, from_=0, to=255, orient=tk.HORIZONTAL, length=200, label="Max")
-    g_max_scale.pack(side=tk.LEFT)
+    g_max_scale = Scale(range_frame, from_=0, to=255,
+                        orient=ctk.HORIZONTAL, length=200, label="Max")
+    g_max_scale.pack(side=ctk.LEFT)
 
     # Configuration for the B channel (blue)
-    b_label = tk.Label(range_frame, text="B Channel:")
-    b_label.pack(side=tk.LEFT)
+    b_label = ctk.CTkLabel(range_frame, text="B Channel:")
+    b_label.pack(side=ctk.LEFT)
 
-    b_min_scale = Scale(range_frame, from_=0, to=255, orient=tk.HORIZONTAL, length=200, label="Min")
-    b_min_scale.pack(side=tk.LEFT)
+    b_min_scale = Scale(range_frame, from_=0, to=255,
+                        orient=ctk.HORIZONTAL, length=200, label="Min")
+    b_min_scale.pack(side=ctk.LEFT)
 
-    b_max_scale = Scale(range_frame, from_=0, to=255, orient=tk.HORIZONTAL, length=200, label="Max")
-    b_max_scale.pack(side=tk.LEFT)
+    b_max_scale = Scale(range_frame, from_=0, to=255,
+                        orient=ctk.HORIZONTAL, length=200, label="Max")
+    b_max_scale.pack(side=ctk.LEFT)
 
     return r_min_scale, r_max_scale, g_min_scale, g_max_scale, b_min_scale, b_max_scale
 
 # Function to create the channel order change window
+
+
 def open_order_change_window():
     order_change_window = Toplevel(root)
     order_change_window.title("Change Channel Order")
@@ -150,43 +211,53 @@ def open_order_change_window():
 
     # Create option buttons for channel orders
     for option in options:
-        option_button = Radiobutton(order_change_window, text=option, variable=choice_var, value=option)
+        option_button = Radiobutton(
+            order_change_window, text=option, variable=choice_var, value=option)
         option_button.pack()
 
     # Button to confirm the choice
-    confirm_button = tk.Button(order_change_window, text="Confirm", command=lambda
-
-: save_and_change_order(choice_var.get(), order_change_window))
+    confirm_button = ctk.CTkButton(order_change_window, text="Confirm", command=lambda: save_and_change_order(
+        choice_var.get(), order_change_window))
     confirm_button.pack()
 
 # Function to save and change the channel order
+
+
 def save_and_change_order(order, window):
     order_var.set(order)
     window.destroy()
 
 # Function to create the add values to channels window
+
+
 def open_add_values_window():
     add_values_window = Toplevel(root)
     add_values_window.title("Add Values to Channels")
 
     # Sliders to add values to R, G, B channels
-    slider_r = Scale(add_values_window, from_=-255, to=255, orient=tk.HORIZONTAL, length=200, label="Add to R Channel")
+    slider_r = Scale(add_values_window, from_=-255, to=255,
+                     orient=ctk.HORIZONTAL, length=200, label="Add to R Channel")
     slider_r.set(add_r_var.get())
     slider_r.pack()
 
-    slider_g = Scale(add_values_window, from_=-255, to=255, orient=tk.HORIZONTAL, length=200, label="Add to G Channel")
+    slider_g = Scale(add_values_window, from_=-255, to=255,
+                     orient=ctk.HORIZONTAL, length=200, label="Add to G Channel")
     slider_g.set(add_g_var.get())
     slider_g.pack()
 
-    slider_b = Scale(add_values_window, from_=-255, to=255, orient=tk.HORIZONTAL, length=200, label="Add to B Channel")
+    slider_b = Scale(add_values_window, from_=-255, to=255,
+                     orient=ctk.HORIZONTAL, length=200, label="Add to B Channel")
     slider_b.set(add_b_var.get())
     slider_b.pack()
 
     # Button to confirm and apply the values
-    confirm_button = tk.Button(add_values_window, text="Confirm", command=lambda: save_and_add_values(slider_r.get(), slider_g.get(), slider_b.get(), add_values_window))
+    confirm_button = ctk.Button(add_values_window, text="Confirm", command=lambda: save_and_add_values(
+        slider_r.get(), slider_g.get(), slider_b.get(), add_values_window))
     confirm_button.pack()
 
 # Function to save and add values to R, G, B channels
+
+
 def save_and_add_values(add_r, add_g, add_b, window):
     add_r_var.set(add_r)
     add_g_var.set(add_g)
@@ -194,36 +265,47 @@ def save_and_add_values(add_r, add_g, add_b, window):
     window.destroy()
 
 # Function to save the modified image
+
+
 def save_image():
     global modified_image
     if modified_image:
-        path = filedialog.asksaveasfilename(defaultextension=".png", filetypes=[("PNG Files", "*.png")])
+        path = filedialog.asksaveasfilename(
+            defaultextension=".png", filetypes=[("PNG Files", "*.png")])
         if path:
             modified_image.save(path)
 
+
+def validate(P):
+    if len(P) == 0:
+        # empty Entry is ok
+        return True
+    elif P.isdigit() and P >= 0 and P <= 255:
+        return True
+    else:
+        return False
+
+
 # Create the main window
-root = tk.Tk()
+root = ctk.CTk()
 root.title("Color Substitution")
 
 # Create a frame for widgets
-frame = tk.Frame(root)
+frame = ctk.CTkFrame(root)
 frame.pack()
 
-add_alpha_var = DoubleVar(value=1.0)
-add_alpha_button = tk.Button(frame, text="Add to Channel A", command=open_add_alpha_window)
-add_alpha_button.pack()
-
 # Create a button to open the image file
-open_file_button = tk.Button(frame, text="Open file", command=open_file)
-open_file_button.pack()
+open_file_button = ctk.CTkButton(frame, text="Open file", command=open_file)
+open_file_button.grid(row=0, column=0, padx=20, pady=20)
 
 # Create a label to display the modified image
-image_label = tk.Label(root)
+image_label = ctk.CTkLabel(root)
 image_label.pack()
 
 # Create a button to apply color substitution
-apply_button = tk.Button(frame, text="Apply color", command=apply_color)
-apply_button.pack()
+apply_button = ctk.CTkButton(frame, text="Apply color", command=apply_color)
+apply_button.grid(row=3, column=0, padx=20, pady=20)
+
 
 # Create a range frame
 r_min, r_max, g_min, g_max, b_min, b_max = create_range_frame()
@@ -235,15 +317,34 @@ add_g_var = IntVar(value=0)
 add_b_var = IntVar(value=0)
 
 # Create "Change" and "Add" buttons
-change_button = tk.Button(frame, text="Change", command=open_order_change_window)
-change_button.pack()
+change_button = ctk.CTkButton(frame, text="Change Channel Order",
+                              command=open_order_change_window)
+change_button.grid(row=2, column=0, padx=20, pady=20)
 
-add_button = tk.Button(frame, text="Add", command=open_add_values_window)
-add_button.pack()
+add_button = ctk.CTkButton(frame, text="Adjust RGB",
+                           command=open_add_values_window)
+add_button.grid(row=2, column=1, padx=20, pady=20)
+
+add_alpha_var = DoubleVar(value=1.0)
+add_alpha_button = ctk.CTkButton(
+    frame, text="Adjust A", command=open_add_alpha_window)
+add_alpha_button.grid(row=2, column=2, padx=20, pady=20)
+
 
 # Button to save the image
-save_button = tk.Button(frame, text="Save Image", command=save_image)
-save_button.pack()
+save_button = ctk.CTkButton(frame, text="Save Image", command=save_image)
+save_button.grid(row=3, column=1, padx=20, pady=20)
+
+# vcmd = (root.register(validate), '%P')
+
+# r_lower = ctk.CTkEntry(root, placeholder_text="0",
+#                        validate="key", validatecommand=vcmd)
+# r_lower.pack()
+
+# r_upper = ctk.CTkEntry(root, placeholder_text="255",
+#                        validate="key", validatecommand=vcmd)
+# r_upper.pack()
+
 
 # Start the main loop
 root.mainloop()

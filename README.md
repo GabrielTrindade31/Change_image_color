@@ -9,10 +9,10 @@
 >
 >Efficiency will depend on the values you use.
 >
-><img src="Controle_desligado.png" alt="DS4 LED off">
+><img src="images/Controle_desligado.png" alt="DS4 LED off">
 
 
-<img src="Controle_cor_vermelha.png" alt="Changed DS4 LED to red">
+<img src="images/Controle_cor_vermelha.png" alt="Changed DS4 LED to red">
 >
 
 ### Adjustments and improvements
@@ -48,5 +48,5 @@ To use Change_image_color, follow these steps:
 9. After applying the filters, select the "Apply color" button to modify the image.
 10. With the modified image, use "Save Image" to save the image.
 11. In the case of RGBA, if you want to modify the alpha channel, "Add to channel A" serves this purpose.
-<img src="exemplo.jpg" alt="Example of color before being changed">
-<img src="modificada.jpg" alt="Modified image">
+<img src="images/exemplo.jpg" alt="Example of color before being changed">
+<img src="images/modificada.jpg" alt="Modified image">
