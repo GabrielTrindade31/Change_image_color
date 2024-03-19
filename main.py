@@ -31,6 +31,12 @@ class App(ctk.CTk):
         # run
         self.mainloop()
 
+    def init_parameters(self):
+        self.order_var = StringVar(value="RGBA")
+        self.add_r_var = IntVar(value=0)
+        self.add_g_var = IntVar(value=0)
+        self.add_b_var = IntVar(value=0)
+
     def import_image(self, path):
         global image
         self.image = Image.open(path)
@@ -39,7 +45,7 @@ class App(ctk.CTk):
 
         self.image_import.grid_forget()
         self.image_output = ImageOutput(self, self.resize_image)
-        self.menu = Menu(self)
+        self.menu = Menu(self, self.export_image)
 
     def resize_image(self, event):
 
@@ -62,6 +68,10 @@ class App(ctk.CTk):
 
         # self.tab_view = MyTabView(master=self)
         # self.tab_view.grid(row=0, column=0, padx=20, pady=20)
+    
+    def export_image(self, name, file, path):
+        export_string = f'{path}/{name}.{file}'
+        self.image.save(export_string)
 
 
 app = App()
@@ -111,31 +121,12 @@ app = App()
 
 # OLD CODE BELOW HERE
 
-
-# # Function to open the image file
-# def open_file():
-#     global image
-#     path = filedialog.askopenfilename()
-#     image = Image.open(path)
-
-#     # Display the original image
-#     image_tk = ImageTk.PhotoImage(image)
-#     image_label.configure(image=image_tk)
-#     image_label.image = image_tk
-
-# # Function to apply color substitution
-# # Function to identify if the image is RGB or RGBA
-
-
 # def identify_channels():
 #     if image:
 #         if image.mode == "RGBA":
 #             return True
 #         elif image.mode == "RGB":
 #             return False
-
-# # Function to add values to channel A
-
 
 # def open_add_alpha_window():
 #     add_alpha_window = Toplevel(root)
@@ -152,16 +143,10 @@ app = App()
 #         alpha_slider.get(), add_alpha_window))
 #     confirm_alpha_button.pack()
 
-# # Function to save and add value to channel A
-
-
 # def save_and_add_alpha(add_alpha, window):
 #     add_alpha_var.set(add_alpha)
 #     window.destroy()
 #     apply_color()  # Call the function to update the modified image after changing channel A
-
-# # Create a variable to store the value to add to channel A
-
 
 # def apply_color():
 #     global image, modified_image
@@ -219,9 +204,6 @@ app = App()
 #         image_label.configure(image=image_tk)
 #         image_label.image = image_tk
 
-# # Function to create a range frame
-
-
 # def create_range_frame():
 #     range_frame = ctk.CTkFrame(root)
 #     range_frame.pack()
@@ -264,9 +246,6 @@ app = App()
 
 #     return r_min_scale, r_max_scale, g_min_scale, g_max_scale, b_min_scale, b_max_scale
 
-# # Function to create the channel order change window
-
-
 # def open_order_change_window():
 #     order_change_window = Toplevel(root)
 #     order_change_window.title("Change Channel Order")
@@ -287,15 +266,9 @@ app = App()
 #         choice_var.get(), order_change_window))
 #     confirm_button.pack()
 
-# # Function to save and change the channel order
-
-
 # def save_and_change_order(order, window):
 #     order_var.set(order)
 #     window.destroy()
-
-# # Function to create the add values to channels window
-
 
 # def open_add_values_window():
 #     add_values_window = Toplevel(root)
@@ -322,40 +295,11 @@ app = App()
 #         slider_r.get(), slider_g.get(), slider_b.get(), add_values_window))
 #     confirm_button.pack()
 
-# # Function to save and add values to R, G, B channels
-
-
 # def save_and_add_values(add_r, add_g, add_b, window):
 #     add_r_var.set(add_r)
 #     add_g_var.set(add_g)
 #     add_b_var.set(add_b)
 #     window.destroy()
-
-# # Function to save the modified image
-
-
-# def save_image():
-#     global modified_image
-#     if modified_image:
-#         path = filedialog.asksaveasfilename(
-#             defaultextension=".png", filetypes=[("PNG Files", "*.png")])
-#         if path:
-#             modified_image.save(path)
-
-
-# def validate(P):
-#     if len(P) == 0:
-#         # empty Entry is ok
-#         return True
-#     elif P.isdigit() and P >= 0 and P <= 255:
-#         return True
-#     else:
-#         return False
-
-
-# # Create the main window
-# root = ctk.CTk()
-# root.title("Color Substitution")
 
 # # Create a frame for widgets
 # frame = ctk.CTkFrame(root)
@@ -397,21 +341,3 @@ app = App()
 #     frame, text="Adjust A", command=open_add_alpha_window)
 # add_alpha_button.grid(row=2, column=2, padx=20, pady=20)
 
-
-# # Button to save the image
-# save_button = ctk.CTkButton(frame, text="Save Image", command=save_image)
-# save_button.grid(row=3, column=1, padx=20, pady=20)
-
-# # vcmd = (root.register(validate), '%P')
-
-# # r_lower = ctk.CTkEntry(root, placeholder_text="0",
-# #                        validate="key", validatecommand=vcmd)
-# # r_lower.pack()
-
-# # r_upper = ctk.CTkEntry(root, placeholder_text="255",
-# #                        validate="key", validatecommand=vcmd)
-# # r_upper.pack()
-
-
-# # Start the main loop
-# root.mainloop()
