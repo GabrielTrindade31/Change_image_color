@@ -102,15 +102,27 @@ class EditPanel(Panel):
         super().__init__(parent=parent)
         self.pack(fill='x', pady=4)
 
-        add_alpha_var = ctk.DoubleVar(value=1.0)
-        add_alpha_button = ctk.CTkButton(self, text="Add to Channel A")
-        add_alpha_button.pack(side='top', pady=10)
-        
         # Create a button to apply color substitution
         apply_button = ctk.CTkButton(self, text="Apply color")
         apply_button.pack(side='top', pady=10)
-        
+
         add_button = ctk.CTkButton(self, text="Add Colors")
         add_button.pack(side='top', pady=10)
 
 
+class AlphaPanel(Panel):
+    def __init__(self, parent):
+        super().__init__(parent=parent)
+        self.pack(fill='x', pady=4)
+
+        self.rowconfigure(0, weight=1)
+        self.columnconfigure(0, weight=1, uniform='a')
+        self.columnconfigure(1, weight=3, uniform='a')
+
+        label = ctk.CTkLabel(self, text="Alpha")
+        label.grid(column=0, row=0, pady=5, sticky='E')
+        alpha = ctk.CTkEntry(self, placeholder_text="100")
+        alpha.grid(column=1, row=0, pady=5)
+        add_alpha_button = ctk.CTkButton(self, text="Apply Alpha",)
+        add_alpha_button.grid(column=0, row=1, columnspan=2, pady=(0, 10))
+        #TODO add command to save alpha value

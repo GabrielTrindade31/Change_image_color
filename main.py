@@ -34,12 +34,12 @@ class App(ctk.CTk):
         self.mainloop()
 
     def init_parameters(self):
-        self.order_var = StringVar(value="RGBA")
         self.add_r_var = IntVar(value=0)
         self.add_g_var = IntVar(value=0)
         self.add_b_var = IntVar(value=0)
+        self.add_a_var = IntVar(value=0)
 
-        self.channels_var = ctk.StringVar(value = CHANNELS[0])
+        self.channels_var = StringVar(value = CHANNELS[0])
 
     def import_image(self, path):
         global image
@@ -55,7 +55,7 @@ class App(ctk.CTk):
 
         canvas_ratio = event.width / event.height
 
-        # reize image
+        # resize image
         if canvas_ratio > self.image_ratio:  # canvas wider than image
             image_height = int(event.height)
             image_width = int(image_height * self.image_ratio)
@@ -70,8 +70,6 @@ class App(ctk.CTk):
         self.image_output.create_image(
             event.width/2, event.height/2, image=self.image_tk)
 
-        # self.tab_view = MyTabView(master=self)
-        # self.tab_view.grid(row=0, column=0, padx=20, pady=20)
     
     def export_image(self, name, file, path):
         export_string = f'{path}/{name}.{file}'
@@ -88,26 +86,6 @@ app = App()
 #             return True
 #         elif image.mode == "RGB":
 #             return False
-
-# def open_add_alpha_window():
-#     add_alpha_window = Toplevel(root)
-#     add_alpha_window.title("Add Value to Channel A")
-
-#     # Slider to add value to channel A
-#     alpha_slider = Scale(add_alpha_window, from_=0.0, to=1.0, resolution=0.01,
-#                          orient=ctk.HORIZONTAL, length=200, label="Add to Channel A")
-#     alpha_slider.set(add_alpha_var.get())
-#     alpha_slider.pack()
-
-#     # Button to confirm and apply the value
-#     confirm_alpha_button = ctk.Button(add_alpha_window, text="Confirm", command=lambda: save_and_add_alpha(
-#         alpha_slider.get(), add_alpha_window))
-#     confirm_alpha_button.pack()
-
-# def save_and_add_alpha(add_alpha, window):
-#     add_alpha_var.set(add_alpha)
-#     window.destroy()
-#     apply_color()  # Call the function to update the modified image after changing channel A
 
 # def apply_color():
 #     global image, modified_image
@@ -262,8 +240,3 @@ app = App()
 # add_button = ctk.CTkButton(frame, text="Adjust RGB",
 #                            command=open_add_values_window)
 # add_button.grid(row=2, column=1, padx=20, pady=20)
-
-# add_alpha_var = DoubleVar(value=1.0)
-# add_alpha_button = ctk.CTkButton(
-#     frame, text="Adjust A", command=open_add_alpha_window)
-# add_alpha_button.grid(row=2, column=2, padx=20, pady=20)
