@@ -1,4 +1,5 @@
 import customtkinter as ctk
+import os
 from tkinter import filedialog
 
 
@@ -45,20 +46,34 @@ class FilePathPanel(Panel):
     def __init__(self, parent, path_string):
         super().__init__(parent=parent)
         self.path_string = path_string
+        self.placeholder = ''
+        self.get_download_path()
 
         ctk.CTkButton(self, text='Open Explorer',
                       command=lambda: self.open_file_dialog()).pack(pady=5)
-        ctk.CTkEntry(self, textvariable=self.path_string).pack(
+        ctk.CTkEntry(self, textvariable=self.path_string, placeholder_text=self.placeholder).pack(
             expand=True, fill='both', padx=5, pady=5)
 
     def open_file_dialog(self):
         self.path_string.set(filedialog.askdirectory())
 
+    def get_download_path(self):
+        """Returns the default downloads path for linux or windows"""
+        if os.name == 'nt':
+            import winreg
+            sub_key = r'SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders'
+            downloads_guid = '{374DE290-123F-4565-9164-39C4925E467B}'
+            with winreg.OpenKey(winreg.HKEY_CURRENT_USER, sub_key) as key:
+                location = winreg.QueryValueEx(key, downloads_guid)[0]
+            self.path_string.set(location) 
+        else:
+            self.path_string.set(os.path.join(os.path.expanduser('~'), 'downloads'))
+
 
 class SaveButton(ctk.CTkButton):
     def __init__(self, parent, export_image, name_string, file_string, path_string):
         super().__init__(master=parent, text='save', command=self.save)
-        self.pack(side = 'bottom', pady = 10)
+        self.pack(side='bottom', pady=10)
 
         self.export_image = export_image
         self.name_string = name_string
