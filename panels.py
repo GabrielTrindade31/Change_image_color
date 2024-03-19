@@ -87,13 +87,24 @@ class SaveButton(ctk.CTkButton):
                           self.path_string.get())
 
 
+class OpenButton(ctk.CTkButton):
+    def __init__(self, parent, import_func):
+        super().__init__(master=parent, text="Open Image", command=self.open_dialog)
+        self.pack(side='top', pady=10)
+        self.import_func = import_func
+       
+    def open_dialog(self):
+        path = filedialog.askopenfile().name
+        self.import_func(path)
+
+
 class DropdownPanel(ctk.CTkOptionMenu):
     def __init__(self, parent, data_var, options):
         super().__init__(master=parent, values=options, fg_color='#4a4a4a',
                          button_color='#444', button_hover_color='#333', dropdown_fg_color='#666', variable=data_var, command=self.updateChannel)
         self.pack(fill='x', pady=4)
 
-    def updateChannel(self):
+    def updateChannel(self, parent):
         # print('self: ' + str(self), 'parent' + str(parent))
         self._variable.set(parent)
         # print(self._variable.get())

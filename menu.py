@@ -6,7 +6,7 @@ from settings import *
 
 
 class Menu(ctk.CTkTabview):
-    def __init__(self, parent, export_image, channels_var):
+    def __init__(self, parent, channels_var,  import_image='', export_image=''):
         super().__init__(master=parent)
         self.grid(column=0, row=0, sticky='nsew', padx=10, pady=10)
 
@@ -16,10 +16,19 @@ class Menu(ctk.CTkTabview):
         self.add("Export")
 
         # Widgets
-        # PositionFrame(self.tab('Import'))
+        ImportFrame(self.tab('Import'), import_image)
         EditFrame(self.tab('Edit'), channels_var)
         ExportFrame(self.tab('Export'), export_image)
 
+
+
+class ImportFrame(ctk.CTkFrame):
+    def __init__(self, parent, import_image):
+        super().__init__(master=parent, fg_color='transparent')
+        self.pack(expand=True, fill='both')
+
+        OpenButton(self, import_image)
+       
 
 class EditFrame(ctk.CTkFrame):
     def __init__(self, parent, channels_var):

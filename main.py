@@ -26,9 +26,9 @@ class App(ctk.CTk):
         self.columnconfigure(0, weight=2, uniform='a')
         self.columnconfigure(1, weight=6, uniform='a')
 
-        self.image_import = ImageImport(self, self.import_image)
+        # self.image_import = ImageImport(self, )
 
-        # self.menu = Menu(self)
+        self.menu = Menu(self, self.channels_var, self.import_image)
         
         # run
         self.mainloop()
@@ -42,14 +42,14 @@ class App(ctk.CTk):
         self.channels_var = StringVar(value = CHANNELS[0])
 
     def import_image(self, path):
-        global image
+        # global image
         self.image = Image.open(path)
         self.image_ratio = self.image.size[0] / self.image.size[1]
         self.image_tk = ImageTk.PhotoImage(self.image)
 
-        self.image_import.grid_forget()
+        # self.image_import.grid_forget()
         self.image_output = ImageOutput(self, self.resize_image)
-        self.menu = Menu(self, self.export_image, self.channels_var)
+        self.menu = Menu(self, self.channels_var, export_image=self.export_image)
 
     def resize_image(self, event):
 
@@ -74,6 +74,8 @@ class App(ctk.CTk):
     def export_image(self, name, file, path):
         export_string = f'{path}/{name}.{file}'
         self.image.save(export_string)
+        
+
 
 
 app = App()
