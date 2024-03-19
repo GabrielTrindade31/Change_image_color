@@ -94,7 +94,9 @@ class DropdownPanel(ctk.CTkOptionMenu):
         self.pack(fill='x', pady=4)
 
     def updateChannel(self):
-        print(self)
+        # print('self: ' + str(self), 'parent' + str(parent))
+        self._variable.set(parent)
+        # print(self._variable.get())
 
 
 class EditPanel(Panel):
