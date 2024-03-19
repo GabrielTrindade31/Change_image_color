@@ -175,7 +175,7 @@ class ColorPanel(Panel):
         #TODO apply RGB to image
         
         # print(f'R:{r_var.get()} G:{g_var.get()} B:{b_var.get()} Channel:{channels_var.get()} ')
-        print(image)
+        # print(image)
         print(type(image))
 
         def within_range(pixel, r_range, g_range, b_range):
@@ -197,6 +197,7 @@ class ColorPanel(Panel):
             # Function to convert a pixel to a new pixel
             def convert_pixel(pixel):
                 nonlocal r_min_val, r_max_val, g_min_val, g_max_val, b_min_val, b_max_val
+                # print(r_min_val, r_max_val)
                 if within_range(pixel, (r_min_val, r_max_val), (g_min_val, g_max_val), (b_min_val, b_max_val)):
                     # Add the specified values to the R, G, B, and A channels
                     r, g, b, a = pixel
@@ -210,6 +211,7 @@ class ColorPanel(Panel):
                     g = max(0, min(255, int(g)))
                     b = max(0, min(255, int(b)))
                     a = max(0, min(255, int(a * 255)))  # Scale float alpha to integer range (0-255)
+
 
                     # Check the choice of channel order
                     if channels_var.get() == "RGBA":
@@ -231,4 +233,4 @@ class ColorPanel(Panel):
             modified_image.putdata(list(map(convert_pixel, image.getdata())))
 
             # Display the modified image
-            self.image_output = ImageOutput(self, image)
+            # modified_image.save(r'C:\Users\tyler.shoemake\Downloads\test.png')

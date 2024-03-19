@@ -32,7 +32,7 @@ class App(ctk.CTk):
         self.canvas_width = 0
         self.canvas_height = 0
 
-        self.menu = Menu(self, self.channels_var, self.alpha_var, self.r_var, self.g_var, self.b_var, self.import_image)
+        self.menu = Menu(self, self.channels_var, self.alpha_var, self.r_var, self.g_var, self.b_var, import_image=self.import_image)
         # print(self.alpha_var.get())
         
         # run
@@ -47,13 +47,20 @@ class App(ctk.CTk):
         self.channels_var = StringVar(value = CHANNELS[0])
 
     def import_image(self, path):
-        # global image
-        self.image = Image.open(path)
+        self.original = Image.open(path)
+        self.image = self.original
         self.image_ratio = self.image.size[0] / self.image.size[1]
         self.image_tk = ImageTk.PhotoImage(self.image)
 
         self.image_output = ImageOutput(self, self.resize_image)
-        self.menu = Menu(self, self.channels_var, self.alpha_var, self.r_var, self.g_var, self.b_var, import_image=self.import_image, export_image=self.export_image)
+        self.menu = Menu(self, self.channels_var, self.alpha_var, self.r_var, self.g_var, self.b_var, import_image=self.import_image, export_image=self.export_image, manipulate_image=self.original)
+
+    # def manipulate_image(self, *args):
+    #     self.image = self.original
+
+    #     self.image
+
+    #     self.place_image()
 
     def resize_image(self, event):
 
