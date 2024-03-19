@@ -1,12 +1,11 @@
 import customtkinter as ctk
 from canvas import *
-from PIL import Image, ImageTk
 from panels import *
 from settings import *
 
 
 class Menu(ctk.CTkTabview):
-    def __init__(self, parent, channels_var, alpha_var, r_var, g_var, b_var, manipulate_image,  import_image='', export_image=''):
+    def __init__(self, parent, channels_var, r_var, g_var, b_var, a_var, manipulate_image,  import_image='', export_image=''):
         super().__init__(master=parent)
         self.grid(column=0, row=0, sticky='nsew', padx=10, pady=10)
 
@@ -15,11 +14,9 @@ class Menu(ctk.CTkTabview):
         self.add("Edit")
         self.add("Export")
 
-        # print(alpha_var.get())
-
         # Widgets
         ImportFrame(self.tab('Import'), import_image)
-        EditFrame(self.tab('Edit'), channels_var, alpha_var, r_var, g_var, b_var, manipulate_image)
+        EditFrame(self.tab('Edit'), channels_var, r_var, g_var, b_var, a_var, manipulate_image)
         ExportFrame(self.tab('Export'), export_image)
 
 
@@ -32,13 +29,12 @@ class ImportFrame(ctk.CTkFrame):
        
 
 class EditFrame(ctk.CTkFrame):
-    def __init__(self, parent, channels_var, alpha_var, r_var, g_var, b_var, manipulate_image):
+    def __init__(self, parent, channels_var, r_var, g_var, b_var, a_var, manipulate_image):
         super().__init__(master=parent, fg_color='transparent')
         self.pack(expand=True, fill='both')
 
         DropdownPanel(self, channels_var, CHANNELS)
-        ColorPanel(self, r_var, g_var, b_var, manipulate_image)
-        AlphaPanel(self, alpha_var)
+        ColorPanel(self, r_var, g_var, b_var, a_var, manipulate_image)
         
 
 class ExportFrame(ctk.CTkFrame):

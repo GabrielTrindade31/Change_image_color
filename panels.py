@@ -107,38 +107,11 @@ class DropdownPanel(ctk.CTkOptionMenu):
         self.pack(fill='x', pady=4)
 
     def updateChannel(self, parent):
-        # print('self: ' + str(self), 'parent' + str(parent))
         self._variable.set(parent)
-        # print(self._variable.get())
-
-class AlphaPanel(Panel):
-    def __init__(self, parent, data_var):
-        super().__init__(parent=parent)
-        self.pack(fill='x', pady=4)
-
-        self.rowconfigure(0, weight=1)
-        self.columnconfigure(0, weight=1, uniform='a')
-        self.columnconfigure(1, weight=3, uniform='a')
-
-        label = ctk.CTkLabel(self, text="Alpha")
-        label.grid(column=0, row=0, pady=5, sticky='E')
-        alpha = ctk.CTkEntry(self, placeholder_text="1.0", textvariable=data_var)
-        alpha.grid(column=1, row=0, pady=5)
-        alpha_slider = ctk.CTkSlider(self, from_=ALPHA_MIN, to=ALPHA_MAX, width=200, variable=data_var)
-        alpha_slider.grid(column=0, row=1, columnspan=2, pady=(0, 10))
-
-        add_alpha_button = ctk.CTkButton(self, text="Apply Alpha", command=self.applyAlpha)
-        add_alpha_button.grid(column=0, row=2, columnspan=2, pady=(0, 10))
-    
-    def applyAlpha(self):
-        #TODO apply alpha to image
-        pass
-        # print(type(alpha))
-        # self.data_var.set(alpha)
 
 
 class ColorPanel(Panel):
-    def __init__(self, parent, r_var, g_var, b_var, manipulate_image):
+    def __init__(self, parent, r_var, g_var, b_var, a_var, manipulate_image):
         super().__init__(parent=parent)
         self.pack(fill='x', pady=4)
 
@@ -148,89 +121,33 @@ class ColorPanel(Panel):
 
         label = ctk.CTkLabel(self, text="R")
         label.grid(column=0, row=0, pady=5, sticky='E')
-        r_entry = ctk.CTkEntry(self, placeholder_text="1.0", textvariable=r_var)
+        r_entry = ctk.CTkEntry(self,  textvariable=r_var)
         r_entry.grid(column=1, row=0, pady=5)
         r_slider = ctk.CTkSlider(self, from_=RGB_MIN, to=RGB_MAX, width=200, variable=r_var)
         r_slider.grid(column=0, row=1, columnspan=2, pady=(0, 10))
 
         label = ctk.CTkLabel(self, text="G")
         label.grid(column=0, row=2, pady=5, sticky='E')
-        g_entry = ctk.CTkEntry(self, placeholder_text="1.0", textvariable=g_var)
+        g_entry = ctk.CTkEntry(self, textvariable=g_var)
         g_entry.grid(column=1, row=2, pady=5)
         g_slider = ctk.CTkSlider(self, from_=RGB_MIN, to=RGB_MAX, width=200, variable=g_var)
         g_slider.grid(column=0, row=3, columnspan=2, pady=(0, 10))
 
         label = ctk.CTkLabel(self, text="B")
         label.grid(column=0, row=4, pady=5, sticky='E')
-        b_entry = ctk.CTkEntry(self, placeholder_text="1.0", textvariable=b_var)
+        b_entry = ctk.CTkEntry(self, textvariable=b_var)
         b_entry.grid(column=1, row=4, pady=5)
         b_slider = ctk.CTkSlider(self, from_=RGB_MIN, to=RGB_MAX, width=200, variable=b_var)
         b_slider.grid(column=0, row=5, columnspan=2, pady=(0, 10))
 
+        label = ctk.CTkLabel(self, text="A")
+        label.grid(column=0, row=6, pady=5, sticky='E')
+        a_entry = ctk.CTkEntry(self, textvariable=a_var)
+        a_entry.grid(column=1, row=6, pady=5)
+        a_slider = ctk.CTkSlider(self, from_=ALPHA_MIN, to=ALPHA_MAX, width=200, variable=a_var)
+        a_slider.grid(column=0, row=7, columnspan=2, pady=(0, 10))
+
         # Create a button to apply color substitution
         apply_button = ctk.CTkButton(self, text="Apply color", command=manipulate_image)
-        apply_button.grid(column=0, row=6, columnspan=2, pady=(0, 10))
+        apply_button.grid(column=0, row=8, columnspan=2, pady=(0, 10))
     
-    # def applyRGB(self, image, r_var, g_var, b_var, channels_var):
-    #     #TODO apply RGB to image
-        
-    #     # print(f'R:{r_var.get()} G:{g_var.get()} B:{b_var.get()} Channel:{channels_var.get()} ')
-    #     # print(image)
-    #     print(type(image))
-
-    #     def within_range(pixel, r_range, g_range, b_range):
-    #         r, g, b, _ = pixel
-    #         return r_range[0] <= r <= r_range[1] and g_range[0] <= g <= g_range[1] and b_range[0] <= b <= b_range[1]
-
-    #     def identify_channels(image):
-    #         if image:
-    #             if image.mode == "RGBA":
-    #                 return True
-    #             elif image.mode == "RGB":
-    #                 return False
-        
-    #     if image:
-    #         r_min_val, r_max_val = 0, 255 #TODO: set this up
-    #         g_min_val, g_max_val = 0, 255
-    #         b_min_val, b_max_val = 0, 255
-
-    #         # Function to convert a pixel to a new pixel
-    #         def convert_pixel(pixel):
-    #             nonlocal r_min_val, r_max_val, g_min_val, g_max_val, b_min_val, b_max_val
-    #             # print(r_min_val, r_max_val)
-    #             if within_range(pixel, (r_min_val, r_max_val), (g_min_val, g_max_val), (b_min_val, b_max_val)):
-    #                 # Add the specified values to the R, G, B, and A channels
-    #                 r, g, b, a = pixel
-    #                 r += r_var.get()
-    #                 g += g_var.get()
-    #                 b += b_var.get()
-    #                 a += 0 #TODO: set this up
-
-    #                 # Limit the values to be in the range of 0 to 255 and 0.0 to 1.0
-    #                 r = max(0, min(255, int(r)))
-    #                 g = max(0, min(255, int(g)))
-    #                 b = max(0, min(255, int(b)))
-    #                 a = max(0, min(255, int(a * 255)))  # Scale float alpha to integer range (0-255)
-
-
-    #                 # Check the choice of channel order
-    #                 if channels_var.get() == "RGBA":
-    #                     return (r, g, b, a)
-    #                 elif channels_var.get() == "RBGA":
-    #                     return (r, b, g, a)
-    #                 elif channels_var.get() == "BGRA":
-    #                     return (b, g, r, a)
-    #                 elif channels_var.get() == "BRGA":
-    #                     return (b, r, g, a)
-    #                 elif channels_var.get() == "GRBA":
-    #                     return (g, r, b, a)
-    #                 elif channels_var.get() == "GBRA":
-    #                     return (g, b, r, a)
-    #             return pixel
-
-    #         # Apply color substitution to the image
-    #         modified_image = image.convert("RGBA" if identify_channels(image) else "RGB")
-    #         modified_image.putdata(list(map(convert_pixel, image.getdata())))
-
-    #         # Display the modified image
-    #         # modified_image.save(r'C:\Users\tyler.shoemake\Downloads\test.png')
