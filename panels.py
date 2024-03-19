@@ -1,6 +1,7 @@
 import customtkinter as ctk
 import os
 from tkinter import filedialog
+from settings import *
 
 
 class Panel(ctk.CTkFrame):
@@ -73,7 +74,7 @@ class FilePathPanel(Panel):
 
 class SaveButton(ctk.CTkButton):
     def __init__(self, parent, export_image, name_string, file_string, path_string):
-        super().__init__(master=parent, text='save', command=self.save)
+        super().__init__(master=parent, text='Save', command=self.save)
         self.pack(side='bottom', pady=10)
 
         self.export_image = export_image
@@ -109,22 +110,8 @@ class DropdownPanel(ctk.CTkOptionMenu):
         self._variable.set(parent)
         # print(self._variable.get())
 
-
-class EditPanel(Panel):
-    def __init__(self, parent):
-        super().__init__(parent=parent)
-        self.pack(fill='x', pady=4)
-
-        # Create a button to apply color substitution
-        apply_button = ctk.CTkButton(self, text="Apply color")
-        apply_button.pack(side='top', pady=10)
-
-        add_button = ctk.CTkButton(self, text="Add Colors")
-        add_button.pack(side='top', pady=10)
-
-
 class AlphaPanel(Panel):
-    def __init__(self, parent):
+    def __init__(self, parent, data_var):
         super().__init__(parent=parent)
         self.pack(fill='x', pady=4)
 
@@ -134,8 +121,55 @@ class AlphaPanel(Panel):
 
         label = ctk.CTkLabel(self, text="Alpha")
         label.grid(column=0, row=0, pady=5, sticky='E')
-        alpha = ctk.CTkEntry(self, placeholder_text="100")
+        alpha = ctk.CTkEntry(self, placeholder_text="1.0", textvariable=data_var)
         alpha.grid(column=1, row=0, pady=5)
-        add_alpha_button = ctk.CTkButton(self, text="Apply Alpha",)
-        add_alpha_button.grid(column=0, row=1, columnspan=2, pady=(0, 10))
-        #TODO add command to save alpha value
+        alpha_slider = ctk.CTkSlider(self, from_=ALPHA_MIN, to=ALPHA_MAX, width=200, variable=data_var)
+        alpha_slider.grid(column=0, row=1, columnspan=2, pady=(0, 10))
+
+        add_alpha_button = ctk.CTkButton(self, text="Apply Alpha", command=self.applyAlpha)
+        add_alpha_button.grid(column=0, row=2, columnspan=2, pady=(0, 10))
+    
+    def applyAlpha(self):
+        #TODO apply alpha to image
+        pass
+        # print(type(alpha))
+        # self.data_var.set(alpha)
+
+
+class ColorPanel(Panel):
+    def __init__(self, parent, r_var, g_var, b_var):
+        super().__init__(parent=parent)
+        self.pack(fill='x', pady=4)
+
+        self.rowconfigure(0, weight=1)
+        self.columnconfigure(0, weight=1, uniform='a')
+        self.columnconfigure(1, weight=3, uniform='a')
+
+        label = ctk.CTkLabel(self, text="R")
+        label.grid(column=0, row=0, pady=5, sticky='E')
+        r_entry = ctk.CTkEntry(self, placeholder_text="1.0", textvariable=r_var)
+        r_entry.grid(column=1, row=0, pady=5)
+        r_slider = ctk.CTkSlider(self, from_=RGB_MIN, to=RGB_MAX, width=200, variable=r_var)
+        r_slider.grid(column=0, row=1, columnspan=2, pady=(0, 10))
+
+        label = ctk.CTkLabel(self, text="G")
+        label.grid(column=0, row=2, pady=5, sticky='E')
+        g_entry = ctk.CTkEntry(self, placeholder_text="1.0", textvariable=g_var)
+        g_entry.grid(column=1, row=2, pady=5)
+        g_slider = ctk.CTkSlider(self, from_=RGB_MIN, to=RGB_MAX, width=200, variable=g_var)
+        g_slider.grid(column=0, row=3, columnspan=2, pady=(0, 10))
+
+        label = ctk.CTkLabel(self, text="B")
+        label.grid(column=0, row=4, pady=5, sticky='E')
+        b_entry = ctk.CTkEntry(self, placeholder_text="1.0", textvariable=b_var)
+        b_entry.grid(column=1, row=4, pady=5)
+        b_slider = ctk.CTkSlider(self, from_=RGB_MIN, to=RGB_MAX, width=200, variable=b_var)
+        b_slider.grid(column=0, row=5, columnspan=2, pady=(0, 10))
+
+        # Create a button to apply color substitution
+        apply_button = ctk.CTkButton(self, text="Apply color", command=self.applyRGB)
+        apply_button.grid(column=0, row=6, columnspan=2, pady=(0, 10))
+    
+    def applyRGB(self):
+        #TODO apply RGB to image
+        pass

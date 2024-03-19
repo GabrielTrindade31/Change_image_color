@@ -26,18 +26,17 @@ class App(ctk.CTk):
         self.columnconfigure(0, weight=2, uniform='a')
         self.columnconfigure(1, weight=6, uniform='a')
 
-        # self.image_import = ImageImport(self, )
-
-        self.menu = Menu(self, self.channels_var, self.import_image)
+        self.menu = Menu(self, self.channels_var, self.alpha_var, self.r_var, self.g_var, self.b_var, self.import_image)
+        # print(self.alpha_var.get())
         
         # run
         self.mainloop()
 
     def init_parameters(self):
-        self.add_r_var = IntVar(value=0)
-        self.add_g_var = IntVar(value=0)
-        self.add_b_var = IntVar(value=0)
-        self.add_a_var = IntVar(value=0)
+        self.r_var = IntVar(value=0)
+        self.g_var = IntVar(value=0)
+        self.b_var = IntVar(value=0)
+        self.alpha_var = DoubleVar(value=1.0)
 
         self.channels_var = StringVar(value = CHANNELS[0])
 
@@ -47,9 +46,8 @@ class App(ctk.CTk):
         self.image_ratio = self.image.size[0] / self.image.size[1]
         self.image_tk = ImageTk.PhotoImage(self.image)
 
-        # self.image_import.grid_forget()
         self.image_output = ImageOutput(self, self.resize_image)
-        self.menu = Menu(self, self.channels_var, export_image=self.export_image)
+        self.menu = Menu(self, self.channels_var, self.alpha_var, self.r_var, self.g_var, self.b_var, export_image=self.export_image)
 
     def resize_image(self, event):
 
@@ -187,44 +185,9 @@ app = App()
 
 #     return r_min_scale, r_max_scale, g_min_scale, g_max_scale, b_min_scale, b_max_scale
 
-# def open_add_values_window():
-#     add_values_window = Toplevel(root)
-#     add_values_window.title("Add Values to Channels")
-
-#     # Sliders to add values to R, G, B channels
-#     slider_r = Scale(add_values_window, from_=-255, to=255,
-#                      orient=ctk.HORIZONTAL, length=200, label="Add to R Channel")
-#     slider_r.set(add_r_var.get())
-#     slider_r.pack()
-
-#     slider_g = Scale(add_values_window, from_=-255, to=255,
-#                      orient=ctk.HORIZONTAL, length=200, label="Add to G Channel")
-#     slider_g.set(add_g_var.get())
-#     slider_g.pack()
-
-#     slider_b = Scale(add_values_window, from_=-255, to=255,
-#                      orient=ctk.HORIZONTAL, length=200, label="Add to B Channel")
-#     slider_b.set(add_b_var.get())
-#     slider_b.pack()
-
-#     # Button to confirm and apply the values
-#     confirm_button = ctk.Button(add_values_window, text="Confirm", command=lambda: save_and_add_values(
-#         slider_r.get(), slider_g.get(), slider_b.get(), add_values_window))
-#     confirm_button.pack()
-
-# def save_and_add_values(add_r, add_g, add_b, window):
-#     add_r_var.set(add_r)
-#     add_g_var.set(add_g)
-#     add_b_var.set(add_b)
-#     window.destroy()
-
 # # Create a frame for widgets
 # frame = ctk.CTkFrame(root)
 # frame.pack()
-
-# # Create a label to display the modified image
-# image_label = ctk.CTkLabel(root)
-# image_label.pack()
 
 # # Create a button to apply color substitution
 # apply_button = ctk.CTkButton(frame, text="Apply color", command=apply_color)
