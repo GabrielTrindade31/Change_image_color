@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from image_widgets import *
+from canvas import *
 from PIL import Image, ImageTk
 from panels import *
 

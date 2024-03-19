@@ -1,7 +1,7 @@
 import customtkinter as ctk
 from tkinter import filedialog, Scale, Toplevel, StringVar, Radiobutton, IntVar, DoubleVar  # Add DoubleVar
 from PIL import Image, ImageTk
-from image_widgets import *
+from canvas import *
 from menu import Menu
 
 # Global variables
