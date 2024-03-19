@@ -19,9 +19,8 @@ class Menu(ctk.CTkTabview):
 
         # Widgets
         ImportFrame(self.tab('Import'), import_image)
-        EditFrame(self.tab('Edit'), channels_var, alpha_var, r_var, g_var, b_var)
+        EditFrame(self.tab('Edit'), channels_var, alpha_var, r_var, g_var, b_var, import_image)
         ExportFrame(self.tab('Export'), export_image)
-
 
 
 class ImportFrame(ctk.CTkFrame):
@@ -33,15 +32,14 @@ class ImportFrame(ctk.CTkFrame):
        
 
 class EditFrame(ctk.CTkFrame):
-    def __init__(self, parent, channels_var, alpha_var, r_var, g_var, b_var):
+    def __init__(self, parent, channels_var, alpha_var, r_var, g_var, b_var, import_image):
         super().__init__(master=parent, fg_color='transparent')
         self.pack(expand=True, fill='both')
 
         DropdownPanel(self, channels_var, CHANNELS)
-        ColorPanel(self, r_var, g_var, b_var)
+        ColorPanel(self, r_var, g_var, b_var, channels_var, import_image)
         AlphaPanel(self, alpha_var)
         
-
 
 class ExportFrame(ctk.CTkFrame):
     def __init__(self, parent, export_image):

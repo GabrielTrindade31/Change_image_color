@@ -2,6 +2,7 @@ import customtkinter as ctk
 import os
 from tkinter import filedialog
 from settings import *
+from canvas import *
 
 
 class Panel(ctk.CTkFrame):
@@ -137,7 +138,7 @@ class AlphaPanel(Panel):
 
 
 class ColorPanel(Panel):
-    def __init__(self, parent, r_var, g_var, b_var):
+    def __init__(self, parent, r_var, g_var, b_var, channels_var, image):
         super().__init__(parent=parent)
         self.pack(fill='x', pady=4)
 
@@ -167,9 +168,67 @@ class ColorPanel(Panel):
         b_slider.grid(column=0, row=5, columnspan=2, pady=(0, 10))
 
         # Create a button to apply color substitution
-        apply_button = ctk.CTkButton(self, text="Apply color", command=self.applyRGB)
+        apply_button = ctk.CTkButton(self, text="Apply color", command=lambda: self.applyRGB(image, r_var, g_var, b_var, channels_var))
         apply_button.grid(column=0, row=6, columnspan=2, pady=(0, 10))
     
-    def applyRGB(self):
+    def applyRGB(self, image, r_var, g_var, b_var, channels_var):
         #TODO apply RGB to image
-        pass
+        
+        # print(f'R:{r_var.get()} G:{g_var.get()} B:{b_var.get()} Channel:{channels_var.get()} ')
+        print(image)
+        print(type(image))
+
+        def within_range(pixel, r_range, g_range, b_range):
+            r, g, b, _ = pixel
+            return r_range[0] <= r <= r_range[1] and g_range[0] <= g <= g_range[1] and b_range[0] <= b <= b_range[1]
+
+        def identify_channels(image):
+            if image:
+                if image.mode == "RGBA":
+                    return True
+                elif image.mode == "RGB":
+                    return False
+        
+        if image:
+            r_min_val, r_max_val = 0, 255 #TODO: set this up
+            g_min_val, g_max_val = 0, 255
+            b_min_val, b_max_val = 0, 255
+
+            # Function to convert a pixel to a new pixel
+            def convert_pixel(pixel):
+                nonlocal r_min_val, r_max_val, g_min_val, g_max_val, b_min_val, b_max_val
+                if within_range(pixel, (r_min_val, r_max_val), (g_min_val, g_max_val), (b_min_val, b_max_val)):
+                    # Add the specified values to the R, G, B, and A channels
+                    r, g, b, a = pixel
+                    r += r_var.get()
+                    g += g_var.get()
+                    b += b_var.get()
+                    a += 0 #TODO: set this up
+
+                    # Limit the values to be in the range of 0 to 255 and 0.0 to 1.0
+                    r = max(0, min(255, int(r)))
+                    g = max(0, min(255, int(g)))
+                    b = max(0, min(255, int(b)))
+                    a = max(0, min(255, int(a * 255)))  # Scale float alpha to integer range (0-255)
+
+                    # Check the choice of channel order
+                    if channels_var.get() == "RGBA":
+                        return (r, g, b, a)
+                    elif channels_var.get() == "RBGA":
+                        return (r, b, g, a)
+                    elif channels_var.get() == "BGRA":
+                        return (b, g, r, a)
+                    elif channels_var.get() == "BRGA":
+                        return (b, r, g, a)
+                    elif channels_var.get() == "GRBA":
+                        return (g, r, b, a)
+                    elif channels_var.get() == "GBRA":
+                        return (g, b, r, a)
+                return pixel
+
+            # Apply color substitution to the image
+            modified_image = image.convert("RGBA" if identify_channels(image) else "RGB")
+            modified_image.putdata(list(map(convert_pixel, image.getdata())))
+
+            # Display the modified image
+            self.image_output = ImageOutput(self, image)

@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from tkinter import filedialog, Scale, Toplevel, StringVar, Radiobutton, IntVar, DoubleVar  # Add DoubleVar
+from tkinter import StringVar, IntVar, DoubleVar  # Add DoubleVar
 from PIL import Image, ImageTk
 from canvas import *
 from menu import Menu
@@ -26,6 +26,12 @@ class App(ctk.CTk):
         self.columnconfigure(0, weight=2, uniform='a')
         self.columnconfigure(1, weight=6, uniform='a')
 
+        # canvas
+        self.image_width = 0
+        self.image_height = 0
+        self.canvas_width = 0
+        self.canvas_height = 0
+
         self.menu = Menu(self, self.channels_var, self.alpha_var, self.r_var, self.g_var, self.b_var, self.import_image)
         # print(self.alpha_var.get())
         
@@ -47,26 +53,33 @@ class App(ctk.CTk):
         self.image_tk = ImageTk.PhotoImage(self.image)
 
         self.image_output = ImageOutput(self, self.resize_image)
-        self.menu = Menu(self, self.channels_var, self.alpha_var, self.r_var, self.g_var, self.b_var, export_image=self.export_image)
+        self.menu = Menu(self, self.channels_var, self.alpha_var, self.r_var, self.g_var, self.b_var, import_image=self.import_image, export_image=self.export_image)
 
     def resize_image(self, event):
 
+        # get canvas ratio
         canvas_ratio = event.width / event.height
+
+        # update canvas attributes
+        self.canvas_width = event.width
+        self.canvas_height = event.height
 
         # resize image
         if canvas_ratio > self.image_ratio:  # canvas wider than image
-            image_height = int(event.height)
-            image_width = int(image_height * self.image_ratio)
+            self.image_height = int(event.height)
+            self.image_width = int(self.image_height * self.image_ratio)
         else:  # canvas taller than image
-            image_width = int(event.width)
-            image_height = int(image_width / self.image_ratio)
-
-        # place image
+            self.image_width = int(event.width)
+            self.image_height = int(self.image_width / self.image_ratio)
+        
+        self.place_image()
+    
+    def place_image(self):
         self.image_output.delete('all')
-        resized_image = self.image.resize((image_width, image_height))
+        resized_image = self.image.resize((self.image_width, self.image_height))
         self.image_tk = ImageTk.PhotoImage(resized_image)
         self.image_output.create_image(
-            event.width/2, event.height/2, image=self.image_tk)
+            self.canvas_width/2, self.canvas_height/2, image=self.image_tk)
 
     
     def export_image(self, name, file, path):
