@@ -32,7 +32,7 @@ class App(ctk.CTk):
         self.canvas_width = 0
         self.canvas_height = 0
 
-        self.menu = Menu(self, self.channels_var, self.alpha_var, self.r_var, self.g_var, self.b_var, import_image=self.import_image)
+        self.menu = Menu(self, self.channels_var, self.alpha_var, self.r_var, self.g_var, self.b_var, self.manipulate_image, import_image=self.import_image)
         # print(self.alpha_var.get())
         
         # run
@@ -53,14 +53,77 @@ class App(ctk.CTk):
         self.image_tk = ImageTk.PhotoImage(self.image)
 
         self.image_output = ImageOutput(self, self.resize_image)
-        self.menu = Menu(self, self.channels_var, self.alpha_var, self.r_var, self.g_var, self.b_var, import_image=self.import_image, export_image=self.export_image, manipulate_image=self.original)
+        self.menu = Menu(self, self.channels_var, self.alpha_var, self.r_var, self.g_var, self.b_var, self.manipulate_image, import_image=self.import_image, export_image=self.export_image)
 
-    # def manipulate_image(self, *args):
-    #     self.image = self.original
+    def manipulate_image(self, *args):
+        self.image = self.original
 
-    #     self.image
+        # self.image
+        # def applyRGB(self, image, r_var, g_var, b_var, channels_var):
+        #TODO apply RGB to image
+        
+        # print(f'R:{r_var.get()} G:{g_var.get()} B:{b_var.get()} Channel:{channels_var.get()} ')
+        # print(image)
+        # print(type(self.image))
 
-    #     self.place_image()
+        def within_range(pixel, r_range, g_range, b_range):
+            r, g, b, _ = pixel
+            return r_range[0] <= r <= r_range[1] and g_range[0] <= g <= g_range[1] and b_range[0] <= b <= b_range[1]
+
+        def identify_channels(image):
+            if image:
+                if image.mode == "RGBA":
+                    return True
+                elif image.mode == "RGB":
+                    return False
+        
+        if self.image:
+            r_min_val, r_max_val = 0, 255 #TODO: set this up
+            g_min_val, g_max_val = 0, 255
+            b_min_val, b_max_val = 0, 255
+
+            # Function to convert a pixel to a new pixel
+            def convert_pixel(pixel):
+                nonlocal r_min_val, r_max_val, g_min_val, g_max_val, b_min_val, b_max_val
+                # print(r_min_val, r_max_val)
+                if within_range(pixel, (r_min_val, r_max_val), (g_min_val, g_max_val), (b_min_val, b_max_val)):
+                    # Add the specified values to the R, G, B, and A channels
+                    r, g, b, a = pixel
+                    r += self.r_var.get()
+                    g += self.g_var.get()
+                    b += self.b_var.get()
+                    a += 0 #TODO: set this up
+
+                    # Limit the values to be in the range of 0 to 255 and 0.0 to 1.0
+                    r = max(0, min(255, int(r)))
+                    g = max(0, min(255, int(g)))
+                    b = max(0, min(255, int(b)))
+                    a = max(0, min(255, int(a * 255)))  # Scale float alpha to integer range (0-255)
+
+
+                    # Check the choice of channel order
+                    if self.channels_var.get() == "RGBA":
+                        return (r, g, b, a)
+                    elif self.channels_var.get() == "RBGA":
+                        return (r, b, g, a)
+                    elif self.channels_var.get() == "BGRA":
+                        return (b, g, r, a)
+                    elif self.channels_var.get() == "BRGA":
+                        return (b, r, g, a)
+                    elif self.channels_var.get() == "GRBA":
+                        return (g, r, b, a)
+                    elif self.channels_var.get() == "GBRA":
+                        return (g, b, r, a)
+                return pixel
+
+            # Apply color substitution to the image
+            self.image = self.image.convert("RGBA" if identify_channels(self.image) else "RGB")
+            self.image.putdata(list(map(convert_pixel, self.image.getdata())))
+
+            # Display the modified image
+            # self.image.save(r'C:\Users\tyler.shoemake\Downloads\test.png')
+
+        self.place_image()
 
     def resize_image(self, event):
 

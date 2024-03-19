@@ -6,7 +6,7 @@ from settings import *
 
 
 class Menu(ctk.CTkTabview):
-    def __init__(self, parent, channels_var, alpha_var, r_var, g_var, b_var, import_image='', export_image='', manipulate_image=''):
+    def __init__(self, parent, channels_var, alpha_var, r_var, g_var, b_var, manipulate_image,  import_image='', export_image=''):
         super().__init__(master=parent)
         self.grid(column=0, row=0, sticky='nsew', padx=10, pady=10)
 
@@ -19,7 +19,7 @@ class Menu(ctk.CTkTabview):
 
         # Widgets
         ImportFrame(self.tab('Import'), import_image)
-        EditFrame(self.tab('Edit'), channels_var, alpha_var, r_var, g_var, b_var, import_image)
+        EditFrame(self.tab('Edit'), channels_var, alpha_var, r_var, g_var, b_var, manipulate_image)
         ExportFrame(self.tab('Export'), export_image)
 
 
@@ -37,7 +37,7 @@ class EditFrame(ctk.CTkFrame):
         self.pack(expand=True, fill='both')
 
         DropdownPanel(self, channels_var, CHANNELS)
-        ColorPanel(self, r_var, g_var, b_var, channels_var, manipulate_image)
+        ColorPanel(self, r_var, g_var, b_var, manipulate_image)
         AlphaPanel(self, alpha_var)
         
 
