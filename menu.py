@@ -2,10 +2,10 @@ import customtkinter as ctk
 from canvas import *
 from PIL import Image, ImageTk
 from panels import *
+from settings import *
 
-
-class Menu(ctk.CTkTabview,):
-    def __init__(self, parent, export_image):
+class Menu(ctk.CTkTabview):
+    def __init__(self, parent, export_image, channels_var):
         super().__init__(master=parent)
         self.grid(column=0, row=0, sticky='nsew', padx = 10, pady = 10)
 
@@ -16,18 +16,18 @@ class Menu(ctk.CTkTabview,):
 
         # Widgets
         # PositionFrame(self.tab('Import'))
-        # PositionFrame(self.tab('Edit'))
-        # PositionFrame(self.tab('Export'))
+        EditFrame(self.tab('Edit'), channels_var)
         ExportFrame(self.tab('Export'), export_image)
 
 
-        
-
-
-class PositionFrame(ctk.CTkFrame):
-    def __init__(self, parent):
-        super().__init__(master=parent)
+class EditFrame(ctk.CTkFrame):
+    def __init__(self, parent, channels_var):
+        super().__init__(master=parent, fg_color = 'transparent')
         self.pack(expand=True, fill='both')
+
+        DropdownPanel(self, channels_var, CHANNELS)
+        EditPanel(self)
+        
 
 
 class ExportFrame(ctk.CTkFrame):

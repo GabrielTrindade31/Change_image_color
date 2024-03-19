@@ -3,6 +3,7 @@ from tkinter import filedialog, Scale, Toplevel, StringVar, Radiobutton, IntVar,
 from PIL import Image, ImageTk
 from canvas import *
 from menu import Menu
+from settings import *
 
 # Global variables
 image = None
@@ -18,6 +19,7 @@ class App(ctk.CTk):
         self.geometry('1000x600')
         self.title('Color Substitution')
         self.minsize(800, 500)
+        self.init_parameters()
 
         # layout
         self.rowconfigure(0, weight=1)
@@ -27,7 +29,7 @@ class App(ctk.CTk):
         self.image_import = ImageImport(self, self.import_image)
 
         # self.menu = Menu(self)
-
+        
         # run
         self.mainloop()
 
@@ -37,6 +39,8 @@ class App(ctk.CTk):
         self.add_g_var = IntVar(value=0)
         self.add_b_var = IntVar(value=0)
 
+        self.channels_var = ctk.StringVar(value = CHANNELS[0])
+
     def import_image(self, path):
         global image
         self.image = Image.open(path)
@@ -45,7 +49,7 @@ class App(ctk.CTk):
 
         self.image_import.grid_forget()
         self.image_output = ImageOutput(self, self.resize_image)
-        self.menu = Menu(self, self.export_image)
+        self.menu = Menu(self, self.export_image, self.channels_var)
 
     def resize_image(self, event):
 
@@ -75,49 +79,6 @@ class App(ctk.CTk):
 
 
 app = App()
-
-# class MyTabView(ctk.CTkTabview):
-#     def __init__(self, master, **kwargs):
-#         super().__init__(master, **kwargs)
-
-#         # create tabs
-#         self.add("Import")
-#         self.add("Edit")
-#         self.add("Export")
-
-#         # Widgets
-#         self.image_import = ImageImport(self.tab("Import"), self.import_image)
-
-#         self.label = ctk.CTkLabel(master=self.tab("Edit"))
-#         self.label.grid(row=0, column=0, padx=20, pady=10)
-
-#     def import_image(self, path):
-#         global image
-#         self.image = Image.open(path)
-#         self.image_ratio = self.image.size[0] / self.image.size[1]
-#         self.image_tk = ImageTk.PhotoImage(self.image)
-
-#         self.image_output = ImageOutput(self, self.resize_image)
-
-#     def resize_image(self, event):
-
-#         canvas_ratio = event.width / event.height
-
-#         # reize image
-#         if canvas_ratio > self.image_ratio:  # canvas wider than image
-#             image_height = int(event.height)
-#             image_width = int(image_height * self.image_ratio)
-#         else:  # canvas taller than image
-#             image_width = int(event.width)
-#             image_height = int(image_width / self.image_ratio)
-
-#         # place image
-#         self.image_output.delete('all')
-#         resized_image = self.image.resize((image_width, image_height))
-#         self.image_tk = ImageTk.PhotoImage(resized_image)
-#         self.image_output.create_image(
-#             event.width/2, event.height/2, image=self.image_tk)
-
 
 # OLD CODE BELOW HERE
 
@@ -246,30 +207,6 @@ app = App()
 
 #     return r_min_scale, r_max_scale, g_min_scale, g_max_scale, b_min_scale, b_max_scale
 
-# def open_order_change_window():
-#     order_change_window = Toplevel(root)
-#     order_change_window.title("Change Channel Order")
-
-#     options = ["RGBA", "RBGA", "BGRA", "BRGA", "GRBA", "GBRA"]
-
-#     # Variable to store the selected option
-#     choice_var = StringVar(value=order_var.get())
-
-#     # Create option buttons for channel orders
-#     for option in options:
-#         option_button = Radiobutton(
-#             order_change_window, text=option, variable=choice_var, value=option)
-#         option_button.pack()
-
-#     # Button to confirm the choice
-#     confirm_button = ctk.CTkButton(order_change_window, text="Confirm", command=lambda: save_and_change_order(
-#         choice_var.get(), order_change_window))
-#     confirm_button.pack()
-
-# def save_and_change_order(order, window):
-#     order_var.set(order)
-#     window.destroy()
-
 # def open_add_values_window():
 #     add_values_window = Toplevel(root)
 #     add_values_window.title("Add Values to Channels")
@@ -305,10 +242,6 @@ app = App()
 # frame = ctk.CTkFrame(root)
 # frame.pack()
 
-# # Create a button to open the image file
-# open_file_button = ctk.CTkButton(frame, text="Open file", command=open_file)
-# open_file_button.grid(row=0, column=0, padx=20, pady=20)
-
 # # Create a label to display the modified image
 # image_label = ctk.CTkLabel(root)
 # image_label.pack()
@@ -316,7 +249,6 @@ app = App()
 # # Create a button to apply color substitution
 # apply_button = ctk.CTkButton(frame, text="Apply color", command=apply_color)
 # apply_button.grid(row=3, column=0, padx=20, pady=20)
-
 
 # # Create a range frame
 # r_min, r_max, g_min, g_max, b_min, b_max = create_range_frame()
@@ -327,11 +259,6 @@ app = App()
 # add_g_var = IntVar(value=0)
 # add_b_var = IntVar(value=0)
 
-# # Create "Change" and "Add" buttons
-# change_button = ctk.CTkButton(frame, text="Change Channel Order",
-#                               command=open_order_change_window)
-# change_button.grid(row=2, column=0, padx=20, pady=20)
-
 # add_button = ctk.CTkButton(frame, text="Adjust RGB",
 #                            command=open_add_values_window)
 # add_button.grid(row=2, column=1, padx=20, pady=20)
@@ -340,4 +267,3 @@ app = App()
 # add_alpha_button = ctk.CTkButton(
 #     frame, text="Adjust A", command=open_add_alpha_window)
 # add_alpha_button.grid(row=2, column=2, padx=20, pady=20)
-

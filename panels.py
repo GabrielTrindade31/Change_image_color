@@ -65,9 +65,10 @@ class FilePathPanel(Panel):
             downloads_guid = '{374DE290-123F-4565-9164-39C4925E467B}'
             with winreg.OpenKey(winreg.HKEY_CURRENT_USER, sub_key) as key:
                 location = winreg.QueryValueEx(key, downloads_guid)[0]
-            self.path_string.set(location) 
+            self.path_string.set(location)
         else:
-            self.path_string.set(os.path.join(os.path.expanduser('~'), 'downloads'))
+            self.path_string.set(os.path.join(
+                os.path.expanduser('~'), 'downloads'))
 
 
 class SaveButton(ctk.CTkButton):
@@ -84,3 +85,32 @@ class SaveButton(ctk.CTkButton):
         self.export_image(self.name_string.get(),
                           self.file_string.get(),
                           self.path_string.get())
+
+
+class DropdownPanel(ctk.CTkOptionMenu):
+    def __init__(self, parent, data_var, options):
+        super().__init__(master=parent, values=options, fg_color='#4a4a4a',
+                         button_color='#444', button_hover_color='#333', dropdown_fg_color='#666', variable=data_var, command=self.updateChannel)
+        self.pack(fill='x', pady=4)
+
+    def updateChannel(self):
+        print(self)
+
+
+class EditPanel(Panel):
+    def __init__(self, parent):
+        super().__init__(parent=parent)
+        self.pack(fill='x', pady=4)
+
+        add_alpha_var = ctk.DoubleVar(value=1.0)
+        add_alpha_button = ctk.CTkButton(self, text="Add to Channel A")
+        add_alpha_button.pack(side='top', pady=10)
+        
+        # Create a button to apply color substitution
+        apply_button = ctk.CTkButton(self, text="Apply color")
+        apply_button.pack(side='top', pady=10)
+        
+        add_button = ctk.CTkButton(self, text="Add Colors")
+        add_button.pack(side='top', pady=10)
+
+

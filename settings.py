@@ -1,0 +1,1 @@
+CHANNELS = ["RGBA", "RBGA", "BGRA", "BRGA", "GRBA", "GBRA"]
