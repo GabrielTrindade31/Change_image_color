@@ -148,7 +148,7 @@ class ColorPanel(Panel):
         a_slider.grid(column=0, row=7, columnspan=2, pady=(0, 10))
 
         # Create a button to apply color substitution
-        apply_button = ctk.CTkButton(self, text="Apply color", command=manipulate_image)
+        apply_button = ctk.CTkButton(self, text="View Changes", command=manipulate_image)
         apply_button.grid(column=0, row=8, columnspan=2, pady=(0, 10))
     
 
