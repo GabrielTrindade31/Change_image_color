@@ -5,7 +5,7 @@
 ![GitHub forks](https://img.shields.io/github/forks/GabrielTrindade31/Change_image_color)
 
 
->Hello everyone, this is a code that I made to change pixels in an image. It uses a color range to search for the color you want to change, and it allows you to adjust values to increase or decrease the pixels within that range.
+>Hello everyone, Change_image_color allows you to change pixels in an image. Adjust the filter, which is the range of values you want to be considered to be replaced, and then select the new color of the range with edit.
 >
 >Efficiency will depend on the values you use.
 >
@@ -23,13 +23,19 @@ The project is still in development, and the next updates will focus on the foll
 - [ ] Create an interactive online interface where you can visualize the image before and after
 - [ ] Improve the interface for selecting pixels in the image
 - [ ] Improve the interface for selecting the search area and the value range to be changed
-- [ ] Test and check for future improvements
+- [ ] Add hex input to auto populate rgb edit values
+- [ ] Fix saving as jpg
+- [ ] Create default file name in export tab
+- [ ] Validate entry boxes to ensure they are numbers
+- [ ] Add help section
+- [ ] Consolidate variables being passed to simplify functions
+
 
 ## 💻 Prerequisites
 
 Before you begin, make sure you have met the following requirements:
 
-- Have Python installed on your system and the Pillow and Tkinter libraries installed.
+- Have Python installed on your system and the Pillow and CustomTkinter libraries installed.
 - Operating system compatible with Python.
 - Read the project usage guide.
 
