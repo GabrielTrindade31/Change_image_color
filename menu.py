@@ -59,7 +59,7 @@ class ExportFrame(ctk.CTkFrame):
         self.pack(expand=True, fill='both')
 
         self.name_string = ctk.StringVar()
-        self.file_string = ctk.StringVar(value='jpg')
+        self.file_string = ctk.StringVar(value='png')
         self.path_string = ctk.StringVar()
 
         FileNamePanel(self, self.name_string, self.file_string)
