@@ -1,13 +1,9 @@
 import customtkinter as ctk
-from tkinter import StringVar, IntVar, DoubleVar
+from customtkinter import StringVar, IntVar, DoubleVar
 from PIL import Image, ImageTk
 from canvas import *
 from menu import Menu
 from settings import *
-
-# Global variables
-image = None
-modified_image = None
 
 
 class App(ctk.CTk):
@@ -38,7 +34,6 @@ class App(ctk.CTk):
                          self.channels_var, # current channel
                          self.manipulate_image, import_image=self.import_image # functions
         )
-        # print(self.alpha_var.get())
         
         # run
         self.mainloop()
@@ -75,8 +70,7 @@ class App(ctk.CTk):
              self.manipulate_image, import_image=self.import_image, export_image=self.export_image # functions
         )
 
-
-    def manipulate_image(self, *args):
+    def manipulate_image(self):
         self.image = self.original
 
         def within_range(pixel, r_range, g_range, b_range):
@@ -93,14 +87,6 @@ class App(ctk.CTk):
         if self.image:
             # Function to convert a pixel to a new pixel
             def convert_pixel(pixel):
-                # print(r_min_val, r_max_val)
-
-                # r_min = int(str(self.r_min_var))
-                # r_max = int(str(self.r_max_var))
-                # g_min = int(str(self.g_min_var))
-                # g_max = int(str(self.g_max_var))
-                # b_min = int(str(self.b_min_var))
-                # b_max = int(str(self.b_max_var))
 
                 if within_range(pixel, 
                                 (self.r_min_var.get(), self.r_max_var.get()),
@@ -138,9 +124,6 @@ class App(ctk.CTk):
             # Apply color substitution to the image
             self.image = self.image.convert("RGBA" if identify_channels(self.image) else "RGB")
             self.image.putdata(list(map(convert_pixel, self.image.getdata())))
-
-            # Display the modified image
-            # self.image.save(r'C:\Users\tyler.shoemake\Downloads\test.png')
 
         self.place_image()
 

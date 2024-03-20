@@ -49,8 +49,8 @@ class EditFrame(ctk.CTkFrame):
         super().__init__(master=parent, fg_color='transparent')
         self.pack(expand=True, fill='both')
 
-        DropdownPanel(self, channels_var, CHANNELS)
-        ColorPanel(self, r_var, g_var, b_var, a_var, manipulate_image)
+        ChannelPanel(self, channels_var, CHANNELS)
+        EditPanel(self, r_var, g_var, b_var, a_var, manipulate_image)
         
 
 class ExportFrame(ctk.CTkFrame):
@@ -58,6 +58,7 @@ class ExportFrame(ctk.CTkFrame):
         super().__init__(master=parent, fg_color='transparent')
         self.pack(expand=True, fill='both')
 
+        # variables for saving file
         self.name_string = ctk.StringVar()
         self.file_string = ctk.StringVar(value='png')
         self.path_string = ctk.StringVar()

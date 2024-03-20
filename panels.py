@@ -1,6 +1,6 @@
 import customtkinter as ctk
 import os
-from tkinter import filedialog
+from customtkinter import filedialog
 from settings import *
 from canvas import *
 
@@ -11,6 +11,112 @@ class Panel(ctk.CTkFrame):
         self.pack(fill='x', pady=4, ipady=8)
 
 
+# Import Frame
+class OpenButton(ctk.CTkButton):
+    def __init__(self, parent, import_func):
+        super().__init__(master=parent, text="Open Image", command=self.open_dialog)
+        self.pack(side='top', pady=10)
+        self.import_func = import_func
+       
+    def open_dialog(self):
+        path = filedialog.askopenfile().name
+        self.import_func(path)
+
+
+# Filter Frame
+class FilterPanel(Panel):
+    def __init__(self, parent, r_min_var, r_max_var, g_min_var, g_max_var, b_min_var, b_max_var):
+        super().__init__(parent=parent)
+        self.pack(fill='x', pady=4)
+
+        self.rowconfigure(0, weight=1)
+        self.columnconfigure(0, weight=2, uniform='a')
+        self.columnconfigure(1, weight=2, uniform='a')
+        self.columnconfigure(2, weight=2, uniform='a')
+
+        label = ctk.CTkLabel(self, text="Channel")
+        label.grid(column=0, row=0, sticky='E')
+        label = ctk.CTkLabel(self, text="Min")
+        label.grid(column=1, row=0)
+        label = ctk.CTkLabel(self, text="Max")
+        label.grid(column=2, row=0)
+        
+        label = ctk.CTkLabel(self, text="R")
+        label.grid(column=0, row=1, pady=5, sticky='E')
+        r_entry = ctk.CTkEntry(self, width=50, textvariable=r_min_var)
+        r_entry.grid(column=1, row=1, pady=5)
+        r_entry = ctk.CTkEntry(self, width=50, textvariable=r_max_var)
+        r_entry.grid(column=2, row=1, pady=5)
+
+        label = ctk.CTkLabel(self, text="G")
+        label.grid(column=0, row=2, pady=5, sticky='E')
+        g_entry = ctk.CTkEntry(self, width=50, textvariable=g_min_var)
+        g_entry.grid(column=1, row=2, pady=5)
+        g_entry = ctk.CTkEntry(self, width=50, textvariable=g_max_var)
+        g_entry.grid(column=2, row=2, pady=5)
+
+        label = ctk.CTkLabel(self, text="B")
+        label.grid(column=0, row=3, pady=5, sticky='E')
+        b_entry = ctk.CTkEntry(self, width=50, textvariable=b_min_var)
+        b_entry.grid(column=1, row=3, pady=5)
+        b_entry = ctk.CTkEntry(self, width=50, textvariable=b_max_var)
+        b_entry.grid(column=2, row=3, pady=5)
+
+
+# Edit Frame
+class ChannelPanel(ctk.CTkOptionMenu):
+    def __init__(self, parent, data_var, options):
+        super().__init__(master=parent, values=options, fg_color='#4a4a4a',
+                         button_color='#444', button_hover_color='#333', dropdown_fg_color='#666', variable=data_var, command=self.updateChannel)
+        self.pack(fill='x', pady=4)
+
+    def updateChannel(self, parent):
+        self._variable.set(parent)
+
+
+class EditPanel(Panel):
+    def __init__(self, parent, r_var, g_var, b_var, a_var, manipulate_image):
+        super().__init__(parent=parent)
+        self.pack(fill='x', pady=4)
+
+        self.rowconfigure(0, weight=1)
+        self.columnconfigure(0, weight=1, uniform='a')
+        self.columnconfigure(1, weight=3, uniform='a')
+
+        label = ctk.CTkLabel(self, text="R")
+        label.grid(column=0, row=0, pady=5, sticky='E')
+        r_entry = ctk.CTkEntry(self,  textvariable=r_var)
+        r_entry.grid(column=1, row=0, pady=5)
+        r_slider = ctk.CTkSlider(self, from_=RGB_MIN, to=RGB_MAX, width=200, variable=r_var)
+        r_slider.grid(column=0, row=1, columnspan=2, pady=(0, 10))
+
+        label = ctk.CTkLabel(self, text="G")
+        label.grid(column=0, row=2, pady=5, sticky='E')
+        g_entry = ctk.CTkEntry(self, textvariable=g_var)
+        g_entry.grid(column=1, row=2, pady=5)
+        g_slider = ctk.CTkSlider(self, from_=RGB_MIN, to=RGB_MAX, width=200, variable=g_var)
+        g_slider.grid(column=0, row=3, columnspan=2, pady=(0, 10))
+
+        label = ctk.CTkLabel(self, text="B")
+        label.grid(column=0, row=4, pady=5, sticky='E')
+        b_entry = ctk.CTkEntry(self, textvariable=b_var)
+        b_entry.grid(column=1, row=4, pady=5)
+        b_slider = ctk.CTkSlider(self, from_=RGB_MIN, to=RGB_MAX, width=200, variable=b_var)
+        b_slider.grid(column=0, row=5, columnspan=2, pady=(0, 10))
+
+        label = ctk.CTkLabel(self, text="A")
+        label.grid(column=0, row=6, pady=5, sticky='E')
+        a_entry = ctk.CTkEntry(self, textvariable=a_var)
+        a_entry.grid(column=1, row=6, pady=5)
+        a_slider = ctk.CTkSlider(self, from_=ALPHA_MIN, to=ALPHA_MAX, width=200, variable=a_var)
+        a_slider.grid(column=0, row=7, columnspan=2, pady=(0, 10))
+
+        # Create a button to apply color substitution
+        apply_button = ctk.CTkButton(self, text="View Changes", command=manipulate_image)
+        apply_button.grid(column=0, row=8, columnspan=2, pady=(0, 10))
+
+
+# Export Frame
 class FileNamePanel(Panel):
     def __init__(self, parent, name_string, file_string):
         super().__init__(parent=parent)
@@ -87,106 +193,3 @@ class SaveButton(ctk.CTkButton):
         self.export_image(self.name_string.get(),
                           self.file_string.get(),
                           self.path_string.get())
-
-
-class OpenButton(ctk.CTkButton):
-    def __init__(self, parent, import_func):
-        super().__init__(master=parent, text="Open Image", command=self.open_dialog)
-        self.pack(side='top', pady=10)
-        self.import_func = import_func
-       
-    def open_dialog(self):
-        path = filedialog.askopenfile().name
-        self.import_func(path)
-
-
-class DropdownPanel(ctk.CTkOptionMenu):
-    def __init__(self, parent, data_var, options):
-        super().__init__(master=parent, values=options, fg_color='#4a4a4a',
-                         button_color='#444', button_hover_color='#333', dropdown_fg_color='#666', variable=data_var, command=self.updateChannel)
-        self.pack(fill='x', pady=4)
-
-    def updateChannel(self, parent):
-        self._variable.set(parent)
-
-
-class ColorPanel(Panel):
-    def __init__(self, parent, r_var, g_var, b_var, a_var, manipulate_image):
-        super().__init__(parent=parent)
-        self.pack(fill='x', pady=4)
-
-        self.rowconfigure(0, weight=1)
-        self.columnconfigure(0, weight=1, uniform='a')
-        self.columnconfigure(1, weight=3, uniform='a')
-
-        label = ctk.CTkLabel(self, text="R")
-        label.grid(column=0, row=0, pady=5, sticky='E')
-        r_entry = ctk.CTkEntry(self,  textvariable=r_var)
-        r_entry.grid(column=1, row=0, pady=5)
-        r_slider = ctk.CTkSlider(self, from_=RGB_MIN, to=RGB_MAX, width=200, variable=r_var)
-        r_slider.grid(column=0, row=1, columnspan=2, pady=(0, 10))
-
-        label = ctk.CTkLabel(self, text="G")
-        label.grid(column=0, row=2, pady=5, sticky='E')
-        g_entry = ctk.CTkEntry(self, textvariable=g_var)
-        g_entry.grid(column=1, row=2, pady=5)
-        g_slider = ctk.CTkSlider(self, from_=RGB_MIN, to=RGB_MAX, width=200, variable=g_var)
-        g_slider.grid(column=0, row=3, columnspan=2, pady=(0, 10))
-
-        label = ctk.CTkLabel(self, text="B")
-        label.grid(column=0, row=4, pady=5, sticky='E')
-        b_entry = ctk.CTkEntry(self, textvariable=b_var)
-        b_entry.grid(column=1, row=4, pady=5)
-        b_slider = ctk.CTkSlider(self, from_=RGB_MIN, to=RGB_MAX, width=200, variable=b_var)
-        b_slider.grid(column=0, row=5, columnspan=2, pady=(0, 10))
-
-        label = ctk.CTkLabel(self, text="A")
-        label.grid(column=0, row=6, pady=5, sticky='E')
-        a_entry = ctk.CTkEntry(self, textvariable=a_var)
-        a_entry.grid(column=1, row=6, pady=5)
-        a_slider = ctk.CTkSlider(self, from_=ALPHA_MIN, to=ALPHA_MAX, width=200, variable=a_var)
-        a_slider.grid(column=0, row=7, columnspan=2, pady=(0, 10))
-
-        # Create a button to apply color substitution
-        apply_button = ctk.CTkButton(self, text="View Changes", command=manipulate_image)
-        apply_button.grid(column=0, row=8, columnspan=2, pady=(0, 10))
-    
-
-
-class FilterPanel(Panel):
-    def __init__(self, parent, r_min_var, r_max_var, g_min_var, g_max_var, b_min_var, b_max_var):
-        super().__init__(parent=parent)
-        self.pack(fill='x', pady=4)
-
-        self.rowconfigure(0, weight=1)
-        self.columnconfigure(0, weight=2, uniform='a')
-        self.columnconfigure(1, weight=2, uniform='a')
-        self.columnconfigure(2, weight=2, uniform='a')
-
-        label = ctk.CTkLabel(self, text="Channel")
-        label.grid(column=0, row=0, sticky='E')
-        label = ctk.CTkLabel(self, text="Min")
-        label.grid(column=1, row=0)
-        label = ctk.CTkLabel(self, text="Max")
-        label.grid(column=2, row=0)
-        
-        label = ctk.CTkLabel(self, text="R")
-        label.grid(column=0, row=1, pady=5, sticky='E')
-        r_entry = ctk.CTkEntry(self, width=50, textvariable=r_min_var)
-        r_entry.grid(column=1, row=1, pady=5)
-        r_entry = ctk.CTkEntry(self, width=50, textvariable=r_max_var)
-        r_entry.grid(column=2, row=1, pady=5)
-
-        label = ctk.CTkLabel(self, text="G")
-        label.grid(column=0, row=2, pady=5, sticky='E')
-        g_entry = ctk.CTkEntry(self, width=50, textvariable=g_min_var)
-        g_entry.grid(column=1, row=2, pady=5)
-        g_entry = ctk.CTkEntry(self, width=50, textvariable=g_max_var)
-        g_entry.grid(column=2, row=2, pady=5)
-
-        label = ctk.CTkLabel(self, text="B")
-        label.grid(column=0, row=3, pady=5, sticky='E')
-        b_entry = ctk.CTkEntry(self, width=50, textvariable=b_min_var)
-        b_entry.grid(column=1, row=3, pady=5)
-        b_entry = ctk.CTkEntry(self, width=50, textvariable=b_max_var)
-        b_entry.grid(column=2, row=3, pady=5)
