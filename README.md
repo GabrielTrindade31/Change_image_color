@@ -29,6 +29,7 @@ The project is still in development, and the next updates will focus on the foll
 - [ ] Validate entry boxes to ensure they are numbers
 - [ ] Add help section
 - [ ] Consolidate variables being passed to simplify functions
+- [ ] Fix Channel switching dropdown.
 
 
 ## 💻 Prerequisites
@@ -43,16 +44,17 @@ Before you begin, make sure you have met the following requirements:
 
 To use Change_image_color, follow these steps:
 
-1. Download the code with the name `alterarcor.py`.
-2. Install the required Python libraries used in the code (Pillow and Tkinter).
-3. Execute the code; it will open a Tkinter window.
-4. In this window, there are range values to search for pixels at the bottom using a slider.
-5. Use the "Open file" button to select the image you want to change.
-6. With the image open, apply the filters and change the color as desired.
-7. Using the "Change" button, you can change the order of RGB, making the colors swap places or invert.
-8. Using the "Add" button, you can add and subtract pixel values in the image, modifying its color.
-9. After applying the filters, select the "Apply color" button to modify the image.
-10. With the modified image, use "Save Image" to save the image.
-11. In the case of RGBA, if you want to modify the alpha channel, "Add to channel A" serves this purpose.
-<img src="images/exemplo.jpg" alt="Example of color before being changed">
-<img src="images/modificada.jpg" alt="Modified image">
+1. Download the ZIP and extract.
+2. Install the requirements.txt.
+3. Execute `main.py`.
+4. On the Import tab, use the "Open image" button to select the image you want to change.
+5. On the Filter tab, select the range of values to be included in color substitution.
+6. On the Edit tab, select the new value of the pixels that will be changed from filter tab.
+7. On the Edit tab, apply alpha over the image with the A slider.
+8. On the Edit tab, use the "View Changes" button to view the new image.
+9. On the Export tab, name the file and choose extension.
+10. On the Export tab, select save path.
+11. On the Export tab, use the "Save" button to save the new image.
+
+<img src="images/redPedals.png" alt="Original Image: flower with red pedals">
+<img src="images/bluePedals.png" alt="Modified Image: flower with blue pedals">
