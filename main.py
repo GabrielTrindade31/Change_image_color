@@ -32,18 +32,33 @@ class App(ctk.CTk):
         self.canvas_width = 0
         self.canvas_height = 0
 
-        self.menu = Menu(self, self.channels_var, self.r_var, self.g_var, self.b_var, self.a_var, self.manipulate_image, import_image=self.import_image)
+        self.menu = Menu(self, 
+                         self.r_min_var, self.r_max_var, self.g_min_var, self.g_max_var, self.b_min_var, self.b_max_var, # current filters
+                         self.r_var, self.g_var, self.b_var, self.a_var, # current rgba
+                         self.channels_var, # current channel
+                         self.manipulate_image, import_image=self.import_image # functions
+        )
         # print(self.alpha_var.get())
         
         # run
         self.mainloop()
 
     def init_parameters(self):
+        # current filter
+        self.r_min_var = IntVar(value=0)
+        self.r_max_var = IntVar(value=0)
+        self.g_min_var = IntVar(value=0)
+        self.g_max_var = IntVar(value=0)
+        self.b_min_var = IntVar(value=0)
+        self.b_max_var = IntVar(value=0)
+        
+        # current rgba
         self.r_var = IntVar(value=0)
         self.g_var = IntVar(value=0)
         self.b_var = IntVar(value=0)
         self.a_var = DoubleVar(value=0.0)
 
+        # current channel
         self.channels_var = StringVar(value = CHANNELS[0])
 
     def import_image(self, path):
@@ -53,7 +68,13 @@ class App(ctk.CTk):
         self.image_tk = ImageTk.PhotoImage(self.image)
 
         self.image_output = ImageOutput(self, self.resize_image)
-        self.menu = Menu(self, self.channels_var, self.r_var, self.g_var, self.b_var, self.a_var, self.manipulate_image, import_image=self.import_image, export_image=self.export_image)
+        Menu(self, 
+             self.r_min_var, self.r_max_var, self.g_min_var, self.g_max_var, self.b_min_var, self.b_max_var, # current filters
+             self.r_var, self.g_var, self.b_var, self.a_var, # current rgba
+             self.channels_var, # current channel
+             self.manipulate_image, import_image=self.import_image, export_image=self.export_image # functions
+        )
+
 
     def manipulate_image(self, *args):
         self.image = self.original
@@ -70,15 +91,21 @@ class App(ctk.CTk):
                     return False
         
         if self.image:
-            r_min_val, r_max_val = 0, 255 #TODO: set this up
-            g_min_val, g_max_val = 0, 255
-            b_min_val, b_max_val = 0, 255
-
             # Function to convert a pixel to a new pixel
             def convert_pixel(pixel):
-                nonlocal r_min_val, r_max_val, g_min_val, g_max_val, b_min_val, b_max_val
                 # print(r_min_val, r_max_val)
-                if within_range(pixel, (r_min_val, r_max_val), (g_min_val, g_max_val), (b_min_val, b_max_val)):
+
+                # r_min = int(str(self.r_min_var))
+                # r_max = int(str(self.r_max_var))
+                # g_min = int(str(self.g_min_var))
+                # g_max = int(str(self.g_max_var))
+                # b_min = int(str(self.b_min_var))
+                # b_max = int(str(self.b_max_var))
+
+                if within_range(pixel, 
+                                (self.r_min_var.get(), self.r_max_var.get()),
+                                (self.g_min_var.get(), self.g_max_var.get()),
+                                (self.b_min_var.get(), self.b_max_var.get())):
                     # Add the specified values to the R, G, B, and A channels
                     r, g, b, a = pixel
                     r = self.r_var.get()
