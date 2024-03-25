@@ -83,37 +83,61 @@ class EditPanel(Panel):
         self.columnconfigure(0, weight=1, uniform='a')
         self.columnconfigure(1, weight=3, uniform='a')
 
-        label = ctk.CTkLabel(self, text="R")
+        # Hex Entry
+        label = ctk.CTkLabel(self, text="HEX")
         label.grid(column=0, row=0, pady=5, sticky='E')
-        r_entry = ctk.CTkEntry(self,  textvariable=r_var)
-        r_entry.grid(column=1, row=0, pady=5)
-        r_slider = ctk.CTkSlider(self, from_=RGB_MIN, to=RGB_MAX, width=200, variable=r_var)
-        r_slider.grid(column=0, row=1, columnspan=2, pady=(0, 10))
+        hex_entry = ctk.CTkEntry(self)
+        hex_entry.grid(column=1, row=0, pady=5)
 
-        label = ctk.CTkLabel(self, text="G")
+        # Convert Hex to RGB button
+        convert_button = ctk.CTkButton(self, text="Convert to RGB", command=lambda: self.hex_to_rgb(hex_entry.get(), r_var, g_var, b_var))
+        convert_button.grid(column=0, row=1, columnspan=2, pady=(0, 30))
+
+        # R value
+        label = ctk.CTkLabel(self, text="R")
         label.grid(column=0, row=2, pady=5, sticky='E')
-        g_entry = ctk.CTkEntry(self, textvariable=g_var)
-        g_entry.grid(column=1, row=2, pady=5)
-        g_slider = ctk.CTkSlider(self, from_=RGB_MIN, to=RGB_MAX, width=200, variable=g_var)
-        g_slider.grid(column=0, row=3, columnspan=2, pady=(0, 10))
+        r_entry = ctk.CTkEntry(self,  textvariable=r_var)
+        r_entry.grid(column=1, row=2, pady=5)
+        r_slider = ctk.CTkSlider(self, from_=RGB_MIN, to=RGB_MAX, width=200, variable=r_var)
+        r_slider.grid(column=0, row=3, columnspan=2, pady=(0, 10))
 
-        label = ctk.CTkLabel(self, text="B")
+        # G value
+        label = ctk.CTkLabel(self, text="G")
         label.grid(column=0, row=4, pady=5, sticky='E')
-        b_entry = ctk.CTkEntry(self, textvariable=b_var)
-        b_entry.grid(column=1, row=4, pady=5)
-        b_slider = ctk.CTkSlider(self, from_=RGB_MIN, to=RGB_MAX, width=200, variable=b_var)
-        b_slider.grid(column=0, row=5, columnspan=2, pady=(0, 10))
+        g_entry = ctk.CTkEntry(self, textvariable=g_var)
+        g_entry.grid(column=1, row=4, pady=5)
+        g_slider = ctk.CTkSlider(self, from_=RGB_MIN, to=RGB_MAX, width=200, variable=g_var)
+        g_slider.grid(column=0, row=5, columnspan=2, pady=(0, 10))
 
-        label = ctk.CTkLabel(self, text="A")
+        # B value
+        label = ctk.CTkLabel(self, text="B")
         label.grid(column=0, row=6, pady=5, sticky='E')
-        a_entry = ctk.CTkEntry(self, textvariable=a_var)
-        a_entry.grid(column=1, row=6, pady=5)
-        a_slider = ctk.CTkSlider(self, from_=ALPHA_MIN, to=ALPHA_MAX, width=200, variable=a_var)
-        a_slider.grid(column=0, row=7, columnspan=2, pady=(0, 10))
+        b_entry = ctk.CTkEntry(self, textvariable=b_var)
+        b_entry.grid(column=1, row=6, pady=5)
+        b_slider = ctk.CTkSlider(self, from_=RGB_MIN, to=RGB_MAX, width=200, variable=b_var)
+        b_slider.grid(column=0, row=7, columnspan=2, pady=(0, 10))
 
-        # Create a button to apply color substitution
+        # A value
+        label = ctk.CTkLabel(self, text="A")
+        label.grid(column=0, row=8, pady=5, sticky='E')
+        a_entry = ctk.CTkEntry(self, textvariable=a_var)
+        a_entry.grid(column=1, row=8, pady=5)
+        a_slider = ctk.CTkSlider(self, from_=ALPHA_MIN, to=ALPHA_MAX, width=200, variable=a_var)
+        a_slider.grid(column=0, row=9, columnspan=2, pady=(0, 10))
+
+        # View Changes button
         apply_button = ctk.CTkButton(self, text="View Changes", command=manipulate_image)
-        apply_button.grid(column=0, row=8, columnspan=2, pady=(0, 10))
+        apply_button.grid(column=0, row=10, columnspan=2, pady=(0, 10))
+
+    def hex_to_rgb(self, hex, r_var, g_var, b_var):
+        rgb = []
+        for i in (0, 2, 4):
+            decimal = int(hex[i:i+2], 16)
+            rgb.append(decimal)
+
+        r_var.set(rgb[0])
+        g_var.set(rgb[1])
+        b_var.set(rgb[2])
 
 
 # Export Frame
