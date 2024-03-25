@@ -28,12 +28,34 @@ class App(ctk.CTk):
         self.canvas_width = 0
         self.canvas_height = 0
 
+        self.filter_parameters = {
+            'red_min': self.r_min_var,
+            'red_max': self.r_max_var,
+            'green_min': self.g_min_var,
+            'green_max': self.g_max_var,
+            'blue_min': self.b_min_var,
+            'blue_max': self.b_max_var
+        }
+        
+        self.edit_parameters = {
+            'red': self.r_var,
+            'green': self.g_var,
+            'blue': self.r_var,
+            'alpha': self.a_var,
+            'channels': self.channels_var
+        }
+
         self.menu = Menu(self,
                          self.r_min_var, self.r_max_var, self.g_min_var, self.g_max_var, self.b_min_var, self.b_max_var,  # current filters
                          self.r_var, self.g_var, self.b_var, self.a_var,  # current rgba
                          self.channels_var,  # current channel
                          self.manipulate_image, import_image=self.import_image  # functions
                          )
+        
+        # Prep for new dictionary calls
+        # self.menu = Menu(self, self.filter_parameters, self.edit_parameters
+        #                  self.manipulate_image, import_image=self.import_image  # functions
+        #                  )
 
         # run
         self.mainloop()
