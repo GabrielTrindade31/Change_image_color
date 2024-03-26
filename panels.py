@@ -34,6 +34,8 @@ class FilterPanel(Panel):
         self.columnconfigure(1, weight=2, uniform='a')
         self.columnconfigure(2, weight=2, uniform='a')
 
+        rgb_register = self.register(self.validate_rgb)
+
         label = ctk.CTkLabel(self, text="Channel")
         label.grid(column=0, row=0, sticky='E')
         label = ctk.CTkLabel(self, text="Min")
@@ -43,24 +45,33 @@ class FilterPanel(Panel):
         
         label = ctk.CTkLabel(self, text="R")
         label.grid(column=0, row=1, pady=5, sticky='E')
-        r_entry = ctk.CTkEntry(self, width=50, textvariable=r_min_var)
+        r_entry = ctk.CTkEntry(self, width=50, textvariable=r_min_var, validate="key", validatecommand=(rgb_register, '%P'))
         r_entry.grid(column=1, row=1, pady=5)
-        r_entry = ctk.CTkEntry(self, width=50, textvariable=r_max_var)
+        r_entry = ctk.CTkEntry(self, width=50, textvariable=r_max_var, validate="key", validatecommand=(rgb_register, '%P'))
         r_entry.grid(column=2, row=1, pady=5)
 
         label = ctk.CTkLabel(self, text="G")
         label.grid(column=0, row=2, pady=5, sticky='E')
-        g_entry = ctk.CTkEntry(self, width=50, textvariable=g_min_var)
+        g_entry = ctk.CTkEntry(self, width=50, textvariable=g_min_var, validate="key", validatecommand=(rgb_register, '%P'))
         g_entry.grid(column=1, row=2, pady=5)
-        g_entry = ctk.CTkEntry(self, width=50, textvariable=g_max_var)
+        g_entry = ctk.CTkEntry(self, width=50, textvariable=g_max_var, validate="key", validatecommand=(rgb_register, '%P'))
         g_entry.grid(column=2, row=2, pady=5)
 
         label = ctk.CTkLabel(self, text="B")
         label.grid(column=0, row=3, pady=5, sticky='E')
-        b_entry = ctk.CTkEntry(self, width=50, textvariable=b_min_var)
+        b_entry = ctk.CTkEntry(self, width=50, textvariable=b_min_var, validate="key", validatecommand=(rgb_register, '%P'))
         b_entry.grid(column=1, row=3, pady=5)
-        b_entry = ctk.CTkEntry(self, width=50, textvariable=b_max_var)
+        b_entry = ctk.CTkEntry(self, width=50, textvariable=b_max_var, validate="key", validatecommand=(rgb_register, '%P'))
         b_entry.grid(column=2, row=3, pady=5)
+    
+    def validate_rgb(self, num):
+        if num:
+            if num.isdigit() and int(num) in range(0, 256):
+                return True
+            else:
+                return False
+        else:
+            return True
 
 
 # Edit Frame
