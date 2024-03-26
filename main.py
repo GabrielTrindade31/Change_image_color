@@ -134,18 +134,20 @@ class App(ctk.CTk):
                     # Scale float alpha to integer range (0-255)
                     a = max(0, min(255, int(a * 255)))
 
+                    channel = self.channels_var.get()
+
                     # Check the choice of channel order
-                    if self.channels_var.get() == "RGBA":
+                    if channel == "RGBA":
                         return (r, g, b, a)
-                    elif self.channels_var.get() == "RBGA":
+                    elif channel == "RBGA":
                         return (r, b, g, a)
-                    elif self.channels_var.get() == "BGRA":
+                    elif channel == "BGRA":
                         return (b, g, r, a)
-                    elif self.channels_var.get() == "BRGA":
+                    elif channel == "BRGA":
                         return (b, r, g, a)
-                    elif self.channels_var.get() == "GRBA":
+                    elif channel == "GRBA":
                         return (g, r, b, a)
-                    elif self.channels_var.get() == "GBRA":
+                    elif channel == "GBRA":
                         return (g, b, r, a)
                 return pixel
 

@@ -24,7 +24,6 @@ The project is still in development, and the next updates will focus on the foll
 - [ ] Improve the interface for selecting the search area and the value range to be changed
 - [ ] Fix saving as jpg
 - [ ] Consolidate variables being passed to simplify functions
-- [ ] Fix Channel switching dropdown.
 
 
 ## 💻 Prerequisites
