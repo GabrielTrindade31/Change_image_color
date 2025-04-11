@@ -65,5 +65,21 @@ class ExportFrame(ctk.CTkFrame):
 
         FileNamePanel(self, self.name_string, self.file_string)
         FilePathPanel(self, self.path_string)
+        
+        # Add status label with wrapping
+        self.status_label = ctk.CTkLabel(
+            self, 
+            text="", 
+            text_color="white",
+            wraplength=200,
+        )
+        self.status_label.pack(pady=5, padx=10, fill='x')
+        
         SaveButton(self, export_image, self.name_string,
-                   self.file_string, self.path_string)
+                   self.file_string, self.path_string, self.update_status)
+
+    def update_status(self, success, message):
+        if success:
+            self.status_label.configure(text=f"Success: {message}")
+        else:
+            self.status_label.configure(text=f"{message}", text_color="red")
