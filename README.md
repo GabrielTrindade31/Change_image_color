@@ -19,17 +19,11 @@
 
 The project is still in development, and the next updates will focus on the following tasks:
 
-- [X] Improve the search for ranges and adjustment values
 - [ ] Create an interactive online interface where you can visualize the image before and after
 - [ ] Improve the interface for selecting pixels in the image
 - [ ] Improve the interface for selecting the search area and the value range to be changed
-- [ ] Add hex input to auto populate rgb edit values
 - [ ] Fix saving as jpg
-- [ ] Create default file name in export tab
-- [ ] Validate entry boxes to ensure they are numbers
-- [ ] Add help section
 - [ ] Consolidate variables being passed to simplify functions
-- [ ] Fix Channel switching dropdown.
 
 
 ## 💻 Prerequisites

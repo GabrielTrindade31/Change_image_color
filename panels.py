@@ -34,6 +34,8 @@ class FilterPanel(Panel):
         self.columnconfigure(1, weight=2, uniform='a')
         self.columnconfigure(2, weight=2, uniform='a')
 
+        rgb_register = self.register(self.validate_rgb)
+
         label = ctk.CTkLabel(self, text="Channel")
         label.grid(column=0, row=0, sticky='E')
         label = ctk.CTkLabel(self, text="Min")
@@ -43,24 +45,33 @@ class FilterPanel(Panel):
         
         label = ctk.CTkLabel(self, text="R")
         label.grid(column=0, row=1, pady=5, sticky='E')
-        r_entry = ctk.CTkEntry(self, width=50, textvariable=r_min_var)
+        r_entry = ctk.CTkEntry(self, width=50, textvariable=r_min_var, validate="key", validatecommand=(rgb_register, '%P'))
         r_entry.grid(column=1, row=1, pady=5)
-        r_entry = ctk.CTkEntry(self, width=50, textvariable=r_max_var)
+        r_entry = ctk.CTkEntry(self, width=50, textvariable=r_max_var, validate="key", validatecommand=(rgb_register, '%P'))
         r_entry.grid(column=2, row=1, pady=5)
 
         label = ctk.CTkLabel(self, text="G")
         label.grid(column=0, row=2, pady=5, sticky='E')
-        g_entry = ctk.CTkEntry(self, width=50, textvariable=g_min_var)
+        g_entry = ctk.CTkEntry(self, width=50, textvariable=g_min_var, validate="key", validatecommand=(rgb_register, '%P'))
         g_entry.grid(column=1, row=2, pady=5)
-        g_entry = ctk.CTkEntry(self, width=50, textvariable=g_max_var)
+        g_entry = ctk.CTkEntry(self, width=50, textvariable=g_max_var, validate="key", validatecommand=(rgb_register, '%P'))
         g_entry.grid(column=2, row=2, pady=5)
 
         label = ctk.CTkLabel(self, text="B")
         label.grid(column=0, row=3, pady=5, sticky='E')
-        b_entry = ctk.CTkEntry(self, width=50, textvariable=b_min_var)
+        b_entry = ctk.CTkEntry(self, width=50, textvariable=b_min_var, validate="key", validatecommand=(rgb_register, '%P'))
         b_entry.grid(column=1, row=3, pady=5)
-        b_entry = ctk.CTkEntry(self, width=50, textvariable=b_max_var)
+        b_entry = ctk.CTkEntry(self, width=50, textvariable=b_max_var, validate="key", validatecommand=(rgb_register, '%P'))
         b_entry.grid(column=2, row=3, pady=5)
+    
+    def validate_rgb(self, num):
+        if num:
+            if num.isdigit() and int(num) in range(0, 256):
+                return True
+            else:
+                return False
+        else:
+            return True
 
 
 # Edit Frame
@@ -79,41 +90,80 @@ class EditPanel(Panel):
         super().__init__(parent=parent)
         self.pack(fill='x', pady=4)
 
+        self.r_var = r_var
+        self.g_var = g_var
+        self.b_var = b_var
+
         self.rowconfigure(0, weight=1)
         self.columnconfigure(0, weight=1, uniform='a')
         self.columnconfigure(1, weight=3, uniform='a')
 
-        label = ctk.CTkLabel(self, text="R")
+        rgb_register = self.register(self.validate_rgb)
+
+        # Hex Entry
+        label = ctk.CTkLabel(self, text="HEX")
         label.grid(column=0, row=0, pady=5, sticky='E')
-        r_entry = ctk.CTkEntry(self,  textvariable=r_var)
-        r_entry.grid(column=1, row=0, pady=5)
-        r_slider = ctk.CTkSlider(self, from_=RGB_MIN, to=RGB_MAX, width=200, variable=r_var)
-        r_slider.grid(column=0, row=1, columnspan=2, pady=(0, 10))
+        hex_entry = ctk.CTkEntry(self)
+        hex_entry.grid(column=1, row=0, pady=5)
 
-        label = ctk.CTkLabel(self, text="G")
+        # Convert Hex to RGB button
+        convert_button = ctk.CTkButton(self, text="Convert to RGB", command=lambda: self.hex_to_rgb(self.hex_entry.get()))
+        convert_button.grid(column=0, row=1, columnspan=2, pady=(0, 30))
+
+        # R value
+        label = ctk.CTkLabel(self, text="R")
         label.grid(column=0, row=2, pady=5, sticky='E')
-        g_entry = ctk.CTkEntry(self, textvariable=g_var)
-        g_entry.grid(column=1, row=2, pady=5)
-        g_slider = ctk.CTkSlider(self, from_=RGB_MIN, to=RGB_MAX, width=200, variable=g_var)
-        g_slider.grid(column=0, row=3, columnspan=2, pady=(0, 10))
+        r_entry = ctk.CTkEntry(self,  textvariable=r_var, validate="key", validatecommand=(rgb_register, '%P'))
+        r_entry.grid(column=1, row=2, pady=5)
+        r_slider = ctk.CTkSlider(self, from_=RGB_MIN, to=RGB_MAX, width=200, variable=r_var)
+        r_slider.grid(column=0, row=3, columnspan=2, pady=(0, 10))
 
-        label = ctk.CTkLabel(self, text="B")
+        # G value
+        label = ctk.CTkLabel(self, text="G")
         label.grid(column=0, row=4, pady=5, sticky='E')
-        b_entry = ctk.CTkEntry(self, textvariable=b_var)
-        b_entry.grid(column=1, row=4, pady=5)
-        b_slider = ctk.CTkSlider(self, from_=RGB_MIN, to=RGB_MAX, width=200, variable=b_var)
-        b_slider.grid(column=0, row=5, columnspan=2, pady=(0, 10))
+        g_entry = ctk.CTkEntry(self, textvariable=g_var, validate="key", validatecommand=(rgb_register, '%P'))
+        g_entry.grid(column=1, row=4, pady=5)
+        g_slider = ctk.CTkSlider(self, from_=RGB_MIN, to=RGB_MAX, width=200, variable=g_var)
+        g_slider.grid(column=0, row=5, columnspan=2, pady=(0, 10))
 
-        label = ctk.CTkLabel(self, text="A")
+        # B value
+        label = ctk.CTkLabel(self, text="B")
         label.grid(column=0, row=6, pady=5, sticky='E')
-        a_entry = ctk.CTkEntry(self, textvariable=a_var)
-        a_entry.grid(column=1, row=6, pady=5)
-        a_slider = ctk.CTkSlider(self, from_=ALPHA_MIN, to=ALPHA_MAX, width=200, variable=a_var)
-        a_slider.grid(column=0, row=7, columnspan=2, pady=(0, 10))
+        b_entry = ctk.CTkEntry(self, textvariable=b_var, validate="key", validatecommand=(rgb_register, '%P'))
+        b_entry.grid(column=1, row=6, pady=5)
+        b_slider = ctk.CTkSlider(self, from_=RGB_MIN, to=RGB_MAX, width=200, variable=b_var)
+        b_slider.grid(column=0, row=7, columnspan=2, pady=(0, 10))
 
-        # Create a button to apply color substitution
+        # A value
+        label = ctk.CTkLabel(self, text="A")
+        label.grid(column=0, row=8, pady=5, sticky='E')
+        a_entry = ctk.CTkEntry(self, textvariable=a_var)
+        a_entry.grid(column=1, row=8, pady=5)
+        a_slider = ctk.CTkSlider(self, from_=ALPHA_MIN, to=ALPHA_MAX, width=200, variable=a_var)
+        a_slider.grid(column=0, row=9, columnspan=2, pady=(0, 10))
+
+        # View Changes button
         apply_button = ctk.CTkButton(self, text="View Changes", command=manipulate_image)
-        apply_button.grid(column=0, row=8, columnspan=2, pady=(0, 10))
+        apply_button.grid(column=0, row=10, columnspan=2, pady=(0, 10))
+
+    def hex_to_rgb(self, hex):
+        rgb = []
+        for i in (0, 2, 4):
+            decimal = int(hex[i:i+2], 16)
+            rgb.append(decimal)
+
+        self.r_var.set(rgb[0])
+        self.g_var.set(rgb[1])
+        self.b_var.set(rgb[2])
+    
+    def validate_rgb(self, num):
+        if num:
+            if num.isdigit() and int(num) in range(0, 256):
+                return True
+            else:
+                return False
+        else:
+            return True
 
 
 # Export Frame
@@ -180,7 +230,7 @@ class FilePathPanel(Panel):
 
 
 class SaveButton(ctk.CTkButton):
-    def __init__(self, parent, export_image, name_string, file_string, path_string):
+    def __init__(self, parent, export_image, name_string, file_string, path_string, status_callback):
         super().__init__(master=parent, text='Save', command=self.save)
         self.pack(side='bottom', pady=10)
 
@@ -188,8 +238,15 @@ class SaveButton(ctk.CTkButton):
         self.name_string = name_string
         self.file_string = file_string
         self.path_string = path_string
+        self.status_callback = status_callback
 
     def save(self):
-        self.export_image(self.name_string.get(),
-                          self.file_string.get(),
-                          self.path_string.get())
+        try:
+            self.export_image(
+                self.name_string.get(),
+                self.file_string.get(),
+                self.path_string.get()
+            )
+            self.status_callback(True, "Image saved successfully")
+        except Exception as e:
+            self.status_callback(False, str(e))
